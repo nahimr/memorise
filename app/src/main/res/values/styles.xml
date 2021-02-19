@@ -1,0 +1,13 @@
+<resources>
+    <style name="MemoriseBaseTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="NeumorphicDark" parent="MemoriseBaseTheme">
+
+    </style>
+
+</resources>
