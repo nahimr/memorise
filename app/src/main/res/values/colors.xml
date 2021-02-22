@@ -3,4 +3,18 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorBgLight">#E3EFFE</color>
+    <color name="colorBgDark">#2D2D2D</color>
+    <color name="hintColor">#989898</color>
+    <color name="hintColorDark">#C2C2C2</color>
+    <color name="editTextColor">#5D5D5D</color>
+    <color name="solid_light_color">#ffffff</color>
+    <color name="solid_dark_color">#2D2D2D</color>
+    <color name="editTextColorDark">#DDDDDD</color>
+    <color name="bgColorConnectionBtn">#2B2B2B</color>
+    <color name="bgColorConnectionBtnDark">#F8F8F8</color>
+    <color name="easyColor">#4cd137</color>
+    <color name="hardColor">#fbc531</color>
+    <color name="expertColor">#e84118</color>
+    <color name="timerColor">#c23616</color>
 </resources>
