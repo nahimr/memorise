@@ -7,7 +7,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/NeumorphicDark"
-        android:fullBackupContent="true" />
+        android:theme="@style/NeumorphicLight"
+        android:fullBackupContent="true">
+        <activity android:name=".splashscreen.SplashScreenActivity" android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".MenuActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".authentication.RegisterActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".authentication.LoginActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".game.GameOptionsActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".game.GameScreenActivity" android:screenOrientation="landscape"/>
+    </application>
 
 </manifest>
