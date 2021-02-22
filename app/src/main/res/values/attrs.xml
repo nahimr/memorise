@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MemoriseBaseThemeStyleable">
+        <attr name="splashscreenDrawable" format="reference"/>
+        <attr name="splashscreenBackgroundColor" format="color"/>
+        <attr name="emptyBtn" format="reference"/>
+        <attr name="buttonStyle" format="reference"/>
+        <attr name="textViewStyle" format="reference"/>
+        <attr name="editTextStyle" format="reference" />
+        <attr name="bgColorConnectionBtn" format="color"/>
+        <attr name="inverseColor" format="color"/>
+        <attr name="textViewStyleInGame" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="Block">
+        <attr name="color" format="reference|color" />
+    </declare-styleable>
+</resources>
