@@ -6,8 +6,87 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="NeumorphicDark" parent="MemoriseBaseTheme">
-
+    <style name="MemoriseBaseTheme.EditText" parent="MemoriseBaseTheme">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:autofillHints"> </item>
+        <item name="android:background">@null</item>
+        <item name="android:editable">true</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:fontFamily">@font/next_art_regular</item>
+        <item name="android:enabled">true</item>
     </style>
 
+    <style name="MemoriseBaseTheme.TextView" parent="MemoriseBaseTheme">
+        <item name="android:fontFamily">@font/next_art_bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="NeumorphicDark" parent="MemoriseBaseTheme">
+        <item name="splashscreenDrawable">@drawable/neumorphic_light_logo</item>
+        <item name="splashscreenBackgroundColor">@color/colorBgDark</item>
+        <item name="buttonStyle">@style/NeumorphicDark.Button</item>
+        <item name="textViewStyle">@style/NeumorphicDark.TextView</item>
+        <item name="editTextStyle">@style/NeumorphicDark.EditText</item>
+        <item name="bgColorConnectionBtn">@color/bgColorConnectionBtnDark</item>
+        <item name="inverseColor">@color/solid_dark_color</item>
+    </style>
+
+    <style name="NeumorphicLight" parent="MemoriseBaseTheme">
+        <item name="splashscreenDrawable">@drawable/neumorphic_light_logo</item>
+        <item name="splashscreenBackgroundColor">@color/colorBgLight</item>
+        <item name="emptyBtn">@drawable/neumorphic_light_empty_btn</item>
+        <item name="neumorph_cornerFamily">rounded</item>
+        <item name="neumorph_cornerSize">32dp</item>
+        <item name="buttonStyle">@style/NeumorphicLight.Button</item>
+        <item name="textViewStyle">@style/NeumorphicLight.TextView</item>
+        <item name="editTextStyle">@style/NeumorphicLight.EditText</item>
+        <item name="bgColorConnectionBtn">@color/bgColorConnectionBtn</item>
+        <item name="inverseColor">@color/solid_light_color</item>
+        <item name="textViewStyleInGame">@style/NeumorphicLight.TextView.InGame</item>
+    </style>
+
+    <style name="NeumorphicLight.EditText" parent="MemoriseBaseTheme.EditText">
+        <item name="android:textColor">@color/editTextColor</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+    </style>
+
+    <style name="NeumorphicLight.TextView" parent="MemoriseBaseTheme.TextView">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="NeumorphicLight.TextView.InGame" parent="MemoriseBaseTheme.TextView">
+        <item name="android:textColor">@color/hintColor</item>
+        <item name="android:fontFamily">@font/catamaran</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NeumorphicLight.Button" parent="Widget.Neumorph.Button">
+        <item name="android:fontFamily">@font/next_art_bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
+        <item name="bgColorConnectionBtn">@color/bgColorConnectionBtn</item>
+    </style>
+
+    <style name="NeumorphicDark.EditText" parent="MemoriseBaseTheme.EditText">
+        <item name="android:textColor">@color/editTextColorDark</item>
+        <item name="android:textColorHint">@color/hintColorDark</item>
+    </style>
+
+    <style name="NeumorphicDark.TextView" parent="MemoriseBaseTheme.TextView">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="NeumorphicDark.Button" parent="Widget.Neumorph.Button">
+        <item name="android:fontFamily">@font/next_art_bold</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>
