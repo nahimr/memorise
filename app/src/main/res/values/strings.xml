@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Memorise</string>
+    <string name="signupText">Sign up</string>
+    <string name="emailText">Email</string>
+    <string name="passwordText">Password</string>
+    <string name="usernameText">Username</string>
+    <string name="connectionText">Connection</string>
+    <string name="playText">Play</string>
+    <string name="leaderboardText">Leaderboard</string>
+    <string name="difficultyText">Difficulty</string>
+    <string name="easyText">Easy</string>
+    <string name="hardText">Hard</string>
+    <string name="expertText">Expert</string>
+    <string name="timerText">Timer</string>
+    <string name="levelText">"Level : %d "</string>
+    <string name="pointsText">"Points : %.1f "</string>
+    <string name="exitDialog">Are you sure to quit ?</string>
 </resources>

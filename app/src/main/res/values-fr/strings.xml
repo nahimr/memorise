@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Memorise</string>
+    <string name="signupText">Inscrits Toi</string>
+    <string name="emailText">Email</string>
+    <string name="passwordText">Mot de passe</string>
+    <string name="usernameText">Utilisateur</string>
+    <string name="connectionText">Connexion</string>
+    <string name="playText">Jouer</string>
+    <string name="leaderboardText">Scores</string>
+    <string name="difficultyText">Difficulté</string>
+    <string name="timerText">Chrono</string>
+    <string name="expertText">Expert</string>
+    <string name="hardText">Difficile</string>
+    <string name="easyText">Facile</string>
+    <string name="levelText">"Niveau : %d "</string>
+    <string name="pointsText">"Points : %.1f "</string>
+    <string name="exitDialog">Êtes de vous sur de quitter ?</string>
+</resources>
