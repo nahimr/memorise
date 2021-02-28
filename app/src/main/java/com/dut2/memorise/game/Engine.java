@@ -201,8 +201,8 @@ public abstract class Engine {
         this.lives = this.maxLives;
     }
 
-    public boolean isPlayerHasPlayed(){
-        return this.playerAnswer.size() == this.buttonsState.size();
+    private void ResetPoints(){
+        this.points = 0;
     }
 
     public void ClearLists(){
