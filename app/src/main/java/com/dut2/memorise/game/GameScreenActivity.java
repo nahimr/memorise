@@ -71,10 +71,38 @@ public class GameScreenActivity extends AppCompatActivity {
         firstAnim.startNow();
         secondAnim.startNow();
 
-        if(mode.equals("easy")){
-            easy = new Easy();
-            easy.StartLevel();
-            this.LoadLevel();
+        int dimen = (int)getResources().getDimension(R.dimen.blockSize);
+        Random rnd = new Random();
+
+        IEngine engineListener = new IEngine() {
+            @Override
+            public void onInitLevel() {
+                GameScreenActivity.this.blocksLayout.removeAllViews();
+            }
+
+            @Override
+            public void onLoadBlock(byte pos) {
+                Block block = new Block(GameScreenActivity.this);
+                int color =
+                        Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                block.setARGBColor(color);
+                block.setEnabled(false);
+                block.setOnClickListener(engine.getBlockOnClickListener(pos));
+                blocksLayout.addView(block,dimen,dimen);
+            }
+
+            @Override
+            public void onLoadLightenBlock(byte pos) {
+                engine.addBlockThread(((Block)blocksLayout.getChildAt(pos)).PressedThread(1000));
+            }
+
+            @Override
+            public long onBeforeLevelStart() {
+                GameScreenActivity.this.runOnUiThread(()->
+                        Toast.makeText(GameScreenActivity.this,"Level is starting",
+                                Toast.LENGTH_SHORT).show());
+                return 2000L; // Time to wait before start
+            }
 
             blockAdapter.notifyDataSetChanged();
             blockAdapter.RunThat();
