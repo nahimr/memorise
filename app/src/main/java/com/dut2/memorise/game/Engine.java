@@ -23,17 +23,23 @@ public abstract class Engine {
     private byte lives;
     private byte lightenBlocks;
     private byte numbersOfBlocks;
-    private ArrayList<Byte> buttonsState;
-    private ArrayList<Byte> playerAnswer;
+    private final BlockingQueue<Runnable> blockThreadList;
+    public final ThreadPoolExecutor threadPoolExecutor;
+    private final ArrayList<Byte> blockPattern;
+    private final ArrayList<Byte> playerAnswer;
     private byte level;
-
-    protected Engine(byte MODE_CODE, byte MIN_LIGHTEN_BLOCK,
-                     byte MAX_LIGHTEN_BLOCK,
-                     byte MAX_LIVES, float WEIGHT, boolean TIMER) {
-        this.MAX_LIGHTEN_BLOCK = MAX_LIGHTEN_BLOCK;
-        this.MIN_LIGHTEN_BLOCK = MIN_LIGHTEN_BLOCK;
-        this.MAX_LIVES = MAX_LIVES;
-        this.lightenBlocks = MIN_LIGHTEN_BLOCK;
+    private CountDownTimer countDownTimer;
+    protected IEngine iEngine;
+    private IChange iChange;
+    private ITimer iTimer;
+    private boolean canPause;
+    protected Engine(byte minLightenBlock,
+                     byte maxLightenBlock,
+                     byte maxLives, float weight, boolean timer) {
+        this.maxLightenBlock = maxLightenBlock;
+        this.minLightenBlock = minLightenBlock;
+        this.maxLives = maxLives;
+        this.lightenBlocks = minLightenBlock;
         this.numbersOfBlocks = MIN_BLOCK;
         this.lives = MAX_LIVES;
         this.level = (byte)1;
