@@ -194,8 +194,8 @@ public abstract class Engine {
         Collections.shuffle(this.blockPattern);
     }
 
-    private byte getBlockStateAtPos(int pos){
-        return this.buttonsState.get(pos);
+    public void addPlayerBlockAnswerAtPos(byte state){
+        this.playerAnswer.add(state);
     }
 
     public void setPlayerBlockStateAtPos(int pos, byte state){
