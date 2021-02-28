@@ -214,12 +214,13 @@ public class GameScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: Pause the game here !
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.app_name);
         dialog.setMessage(R.string.exitDialog);
-        dialog.setPositiveButton("YES", (dialog1, which) ->
-                startReverseAnimations(this::finish)).setNegativeButton("NO",(dialog1, which)->
+        dialog.setPositiveButton("YES", (dialog1, which) ->{
+            engine.KillThreads();
+            startReverseAnimations(this::finish);
+        }).setNegativeButton("NO",(dialog1, which)->
                 dialog1.dismiss()).show();
     }
 
