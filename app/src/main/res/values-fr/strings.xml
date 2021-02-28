@@ -16,4 +16,5 @@
     <string name="levelText">"Niveau : %d "</string>
     <string name="pointsText">"Points : %.1f "</string>
     <string name="exitDialog">Êtes de vous sur de quitter ?</string>
+    <string name="timerValueText">Chrono : %d</string>
 </resources>

@@ -16,4 +16,5 @@
     <string name="levelText">"Level : %d "</string>
     <string name="pointsText">"Points : %.1f "</string>
     <string name="exitDialog">Are you sure to quit ?</string>
+    <string name="timerValueText">Timer : %d</string>
 </resources>

@@ -15,4 +15,8 @@
     <declare-styleable name="Block">
         <attr name="color" format="reference|color" />
     </declare-styleable>
+
+    <declare-styleable name="BlocksListView">
+        <attr name="numberOfBlocks" format="integer" />
+    </declare-styleable>
 </resources>
