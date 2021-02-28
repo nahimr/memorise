@@ -232,43 +232,23 @@ public abstract class Engine {
         return MIN_BLOCK;
     }
 
-    public byte getMAX_BLOCK() {
-        return MAX_BLOCK;
+    public void setOnEventListener(IEngine iEngine){
+        this.iEngine = iEngine;
     }
 
-    public float getWEIGHT() {
-        return WEIGHT;
+    public void setOnChangeListener(IChange iChange) {
+        this.iChange = iChange;
     }
 
-    public byte getSPEED() {
-        return SPEED;
+    public void setOnTimerChangeListener(ITimer iTimer) {
+        this.iTimer = iTimer;
     }
 
-    public byte getMAX_LIVES() {
-        return MAX_LIVES;
+    public void KillThreads(){
+        this.threadPoolExecutor.shutdownNow();
     }
 
-    public float getPOINTS() {
-        return POINTS;
-    }
-
-    public boolean isTIMER(){
-        return this.TIMER;
-    }
-
-    public byte getLightenBlocks() {
-        return lightenBlocks;
-    }
-
-    public byte getNumbersOfBlocks() {
-        return numbersOfBlocks;
-    }
-
-    public byte getLevel() {
-        return level;
-    }
-
-    public ArrayList<Byte> getButtonsState() {
-        return buttonsState;
+    public boolean CanPause(){
+        return canPause;
     }
 }
