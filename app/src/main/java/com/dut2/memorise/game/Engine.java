@@ -118,28 +118,35 @@ public abstract class Engine {
             this.iTimer.onTimerFinish();
         }
         if(isLevelWon()){
+            this.iEngine.onEndLevel(true);
             // Won level
-            iLevel.onLevelFinished(true);
             // Giving out points
             CalculatePoints();
+            this.iChange.onChangePointsListener(this.points);
             // Check if there is another level
             if((this.level + 1)<= this.MAX_LEVEL){
-                NextLevel();
+                this.Reset(Engine.LEVEL_WON);
+                this.level++;
+                StartLevel();
             } else {
-                Reset();
-                iGameEnded.onGameEnded(true);
+                this.Reset(Engine.END_GAME);
+                this.iEngine.onEndGame(true, this.points);
             }
         } else {
+            this.iEngine.onEndLevel(false);
             // Loose Level
             iLevel.onLevelFinished(false);
             // Check if we have lives !
+            this.lives--;
             if(!isGameOver()){
+                this.Reset(Engine.LEVEL_LOOSE);
                 StartLevel();
             } else {
-                Reset();
-                iGameEnded.onGameEnded(false);
+                this.Reset(Engine.END_GAME);
+                this.iEngine.onEndGame(false, this.points);
             }
         }
+        this.iChange.onChangeLivesListener(this.lives);
     }
 
     public boolean isGameOver(){
