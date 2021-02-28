@@ -19,14 +19,19 @@ public class GameOptionsActivity extends AppCompatActivity {
         final Button timerButton = findViewById(R.id.timerButton);
         Intent intent = new Intent(GameOptionsActivity.this,
                 GameScreenActivity.class);
-        easyButton.setOnClickListener(v->{
-            intent.putExtra("mode","easy");
-            startActivity(intent);
-            finish();
-        });
+        easyButton.setOnClickListener(v -> LoadGameMode(intent,(byte)0));
 
-        /*hardButton.setOnClickListener(v->runGame(Engine.HARD_CODE));
-        expertButton.setOnClickListener(v->runGame(Engine.EXPERT_CODE));
-        timerButton.setOnClickListener(v->runGame(Engine.TIMER_CODE));*/
+        hardButton.setOnClickListener(v -> LoadGameMode(intent,(byte)1));
+
+        expertButton.setOnClickListener(v->LoadGameMode(intent,(byte)2));
+
+        timerButton.setOnClickListener(v->LoadGameMode(intent,(byte)3));
     }
+
+    private void LoadGameMode(Intent intent,byte option){
+        intent.putExtra("mode",option);
+        startActivity(intent);
+        finish();
+    }
+
 }
