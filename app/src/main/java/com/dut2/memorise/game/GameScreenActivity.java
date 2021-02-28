@@ -223,11 +223,12 @@ public class GameScreenActivity extends AppCompatActivity {
                 dialog1.dismiss()).show();
     }
 
-    private void populateBlocks(byte nbBlocks){
-        for (int i = 0; i < nbBlocks ; i++) {
-            blocs.put(i,false);
-        }
-        blockAdapter.notifyDataSetChanged();
+    private Runnable OnExecutionBlocksFinished(){
+        return () -> GameScreenActivity.this.runOnUiThread(() -> {
+            for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
+                this.blocksLayout.getChildAt(i).setEnabled(true);
+            }
+        });
     }
 
     private void loadLives(byte lives){
