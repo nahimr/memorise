@@ -149,7 +149,7 @@ public abstract class Engine {
         this.iChange.onChangeLivesListener(this.lives);
     }
 
-    public boolean isGameOver(){
+    private boolean isGameOver(){
         return this.lives<=0;
     }
 
