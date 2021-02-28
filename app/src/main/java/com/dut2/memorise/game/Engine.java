@@ -186,12 +186,12 @@ public abstract class Engine {
         return this.blockPattern.equals(this.playerAnswer);
     }
 
-    private void RandomizeBlocksState(){
+    private void ShufflePattern(){
         for (byte i = 0; i < this.lightenBlocks; i++) {
             Random random = new Random();
-            this.buttonsState.add((byte)(Math.abs(random.nextInt())%this.numbersOfBlocks));
+            this.blockPattern.add((byte)(Math.abs(random.nextInt())%this.numbersOfBlocks));
         }
-        Collections.shuffle(this.buttonsState);
+        Collections.shuffle(this.blockPattern);
     }
 
     private byte getBlockStateAtPos(int pos){
