@@ -36,7 +36,7 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        String mode = getIntent().getStringExtra("mode");
+        byte mode = getIntent().getByteExtra("mode",(byte)0);
         levelCardView = findViewById(R.id.levelCardView);
         pointsCardView = findViewById(R.id.pointsCardView);
         recyclerView = findViewById(R.id.blocks);
