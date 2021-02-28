@@ -210,14 +210,18 @@ public abstract class Engine {
         this.buttonsState.clear();
     }
 
-    public void Reset(){
+    public void Reset(byte resetState){
         this.ClearLists();
-        this.ResetLives();
-        this.ResetPoints();
-    }
-
-    public byte getMODE_CODE() {
-        return MODE_CODE;
+        if (resetState == Engine.LEVEL_WON){
+            this.ResetLives();
+        } else if(resetState == Engine.LEVEL_LOOSE){
+            this.level = 1;
+        }else if(resetState == Engine.END_GAME){
+            this.level = 1;
+            this.ResetLives();
+            this.ResetPoints();
+        }
+        this.iEngine.onReset(resetState);
     }
 
     public byte getMAX_LEVEL() {
