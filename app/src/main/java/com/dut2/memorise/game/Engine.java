@@ -135,7 +135,6 @@ public abstract class Engine {
         } else {
             this.iEngine.onEndLevel(false);
             // Loose Level
-            iLevel.onLevelFinished(false);
             // Check if we have lives !
             this.lives--;
             if(!isGameOver()){
