@@ -174,32 +174,16 @@ public abstract class Engine {
         }
     }
 
-    private byte mapLightenBlocks(byte level){
-        return mapping(level, (byte)1, MAX_LEVEL, MIN_LIGHTEN_BLOCK,MAX_LIGHTEN_BLOCK);
-    }
-    private byte mapNumberOfBlocks(byte level){
-        return mapping(level, (byte)1, MAX_LEVEL, MIN_BLOCK,MAX_BLOCK);
+    private byte mapLightenBlocks(){
+        return MathsUtility.mapping(this.level, (byte)1, MAX_LEVEL, minLightenBlock, maxLightenBlock);
     }
 
-    private byte mapping(byte t, byte a, byte b, byte c, byte d){
-        byte partA = (byte) (d-c);
-        byte partB = (byte) (b-a);
-        byte divide = (byte) (partA / partB);
-        return (byte) (c + (divide* (t-a)));
+    private byte mapNumberOfBlocks(){
+        return MathsUtility.mapping(this.level, (byte)1, MAX_LEVEL, MIN_BLOCK,MAX_BLOCK);
     }
 
-    public boolean isLevelWon(){
-        Iterator<Byte> s1It = this.buttonsState.iterator();
-        for (Byte aByte : this.playerAnswer) {
-            if (s1It.next().equals(aByte)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean checkIfBlockEqualsAt(int pos, byte posState){
-        return this.buttonsState.get(pos).equals(posState);
+    private boolean isLevelWon(){
+        return this.blockPattern.equals(this.playerAnswer);
     }
 
     private void RandomizeBlocksState(){
