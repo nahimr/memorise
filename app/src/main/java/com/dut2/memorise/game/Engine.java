@@ -228,8 +228,11 @@ public abstract class Engine {
         return this.playerAnswer.size() >= this.blockPattern.size();
     }
 
-    public byte getMIN_BLOCK() {
-        return MIN_BLOCK;
+    public View.OnClickListener getBlockOnClickListener(byte blockPos){
+        return (v -> {
+            this.addPlayerBlockAnswerAtPos(blockPos);
+            if(this.isPlayerHasPlayed()) this.EndLevel();
+        });
     }
 
     public void setOnEventListener(IEngine iEngine){
