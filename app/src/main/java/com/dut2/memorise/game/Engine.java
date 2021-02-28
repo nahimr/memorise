@@ -1,11 +1,12 @@
 package com.dut2.memorise.game;
 
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import com.dut2.memorise.game.events.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Random;
+import com.dut2.memorise.game.utils.MathsUtility;
+import java.util.*;
+import java.util.concurrent.*;
 
 public abstract class Engine {
     public static byte LEVEL_WON = 0;
@@ -153,7 +154,7 @@ public abstract class Engine {
     }
 
     private void CalculatePoints(){
-        this.POINTS += this.level * this.WEIGHT;
+        this.points += this.level * this.weight;
     }
 
     private void LoadLevel(){
@@ -207,7 +208,7 @@ public abstract class Engine {
 
     public void ClearLists(){
         this.playerAnswer.clear();
-        this.buttonsState.clear();
+        this.blockPattern.clear();
     }
 
     public void Reset(byte resetState){
