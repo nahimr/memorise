@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "892068203667",
+    "project_id": "memorise-dut2",
+    "storage_bucket": "memorise-dut2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892068203667:android:2b442328ae6bf066321166",
+        "android_client_info": {
+          "package_name": "com.dut2.memorise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "892068203667-mnum6hhjri7g75us0f783d8tk5ah2r8f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOmRVV__F4209038SPyF7W0E35gfB2bx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "892068203667-mnum6hhjri7g75us0f783d8tk5ah2r8f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
