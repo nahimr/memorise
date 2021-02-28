@@ -26,4 +26,12 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.player_start);
+        buttonSound.start();
+    }
+
 }

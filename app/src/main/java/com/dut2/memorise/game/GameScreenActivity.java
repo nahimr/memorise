@@ -52,6 +52,11 @@ public class GameScreenActivity extends AppCompatActivity {
         pointText = findViewById(R.id.points);
         levelText = findViewById(R.id.level);
         timerText = findViewById(R.id.timer);
+
+        final MediaPlayer cheersSound = MediaPlayer.create(this, R.raw.cheers_endlevel);
+        final MediaPlayer badCheersSound = MediaPlayer.create(this, R.raw.badcheers_endlevel);
+        badCheersSound.setVolume(85.f, 85.f);
+        cheersSound.setVolume(85.f, 85.f);
         firstReversedAnim =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_anim_cardview_reverse).getAnimation();
         firstAnim =
@@ -120,17 +125,22 @@ public class GameScreenActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onEndLevel(boolean levelWon) {
+            public void onEndLevel(boolean levelWon, byte levelCount) {
+               if(levelWon && levelCount % 2 == 0) cheersSound.start();
+               if(!levelWon) badCheersSound.start();
+               GameScreenActivity.this.showOffBlocks(null);
             }
 
             @Override
             public void onEndGame(boolean gameWon, float points) {
-                String endMessage = "%s:%.2f Points";
-                Toast.makeText(GameScreenActivity.this,
-                        gameWon?String.format(endMessage,"Win",points):
-                                String.format(endMessage,"Loose",points),
-                        Toast.LENGTH_LONG).show();
-                GameScreenActivity.this.finish();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(GameScreenActivity.this);
+                dialog.setTitle(R.string.app_name);
+                dialog.setMessage(R.string.playAgain);
+                dialog.setNegativeButton(R.string.yes, (dialog1, which) ->
+                        engine.StartLevel()).setPositiveButton(R.string.no,(dialog1, which)->{
+                    MediaPlayer.create(GameScreenActivity.this, R.raw.player_start).start();
+                    GameScreenActivity.this.finish();
+                }).show();
             }
 
             @Override
@@ -217,22 +227,30 @@ public class GameScreenActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.player_start);
+        buttonSound.start();
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.app_name);
         dialog.setMessage(R.string.exitDialog);
-        dialog.setPositiveButton("YES", (dialog1, which) ->{
+        dialog.setPositiveButton(R.string.yes, (dialog1, which) ->{
+            MediaPlayer.create(this, R.raw.player_start).start();
             engine.KillThreads();
-            startReverseAnimations(this::finish);
-        }).setNegativeButton("NO",(dialog1, which)->
+            this.showOffBlocks(()-> startReverseAnimations(this::finish));
+        }).setNegativeButton(R.string.no,(dialog1, which)->
                 dialog1.dismiss()).show();
     }
 
     private Runnable OnExecutionBlocksFinished(){
-        return () -> GameScreenActivity.this.runOnUiThread(() -> {
-            for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
-                this.blocksLayout.getChildAt(i).setEnabled(true);
-            }
-        });
+        final MediaPlayer transSound = MediaPlayer.create(GameScreenActivity.this, R.raw.win_trans);
+        return () -> {
+            GameScreenActivity.this.notifText.setText(R.string.yourTurn);
+            transSound.start();
+            GameScreenActivity.this.runOnUiThread(() -> {
+                for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
+                    this.blocksLayout.getChildAt(i).setEnabled(true);
+                }
+            });
+        };
     }
 
     private void loadLives(byte lives){

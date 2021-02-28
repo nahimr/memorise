@@ -14,12 +14,46 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        final ImageButton connectButton = findViewById(R.id.connectButton);
-        final Button playButton = findViewById(R.id.playButton);
-        final Button leaderboardButton = findViewById(R.id.leaderboardButton);
-        connectButton.setOnClickListener(v ->
-                startActivity(new Intent(MenuActivity.this, LoginActivity.class)));
-        playButton.setOnClickListener(v ->
-                startActivity(new Intent(MenuActivity.this, GameOptionsActivity.class)));
+        connectButton = findViewById(R.id.connectButton);
+        playButton = findViewById(R.id.playButton);
+        leaderboardButton = findViewById(R.id.leaderboardButton);
+        menuSound = MediaPlayer.create(this, R.raw.game_menu);
+        menuSound.setVolume(50.0f,50.0f);
+        menuSound.setLooping(true);
+        menuSound.start();
+
+        final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.btn_push);
+        connectButton.setOnClickListener(v ->{
+            buttonSound.start();
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(new Intent(MenuActivity.this, LoginActivity.class),
+                    options.toBundle());
+        });
+
+        playButton.setOnClickListener(v ->{
+            buttonSound.start();
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(new Intent(MenuActivity.this, GameOptionsActivity.class),
+                    options.toBundle());
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        menuSound.pause();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        menuSound.seekTo(0);
+        menuSound.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MediaPlayer.create(this, R.raw.player_start).start();
     }
 }

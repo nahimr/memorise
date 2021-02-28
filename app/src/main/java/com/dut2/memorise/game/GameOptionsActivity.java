@@ -13,6 +13,12 @@ public class GameOptionsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_options);
+
+        gameOptionSound = MediaPlayer.create(this, R.raw.game_options);
+        gameOptionSound.setVolume(50.0f,50.0f);
+        gameOptionSound.setLooping(true);
+        gameOptionSound.start();
+
         final Button easyButton = findViewById(R.id.easyButton);
         final Button hardButton = findViewById(R.id.hardButton);
         final Button expertButton = findViewById(R.id.expertButton);
@@ -29,9 +35,32 @@ public class GameOptionsActivity extends AppCompatActivity {
     }
 
     private void LoadGameMode(Intent intent,byte option){
+        final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.btn_push);
+        buttonSound.start();
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         intent.putExtra("mode",option);
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MediaPlayer.create(this, R.raw.player_start).start();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gameOptionSound.stop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gameOptionSound.start();
+    }
+
 
 }

@@ -45,6 +45,8 @@ public class Block extends AppCompatImageButton {
         this.setBackground(null);
         this.setScaleType(ScaleType.CENTER_INSIDE);
         a.recycle();
+        Random rand = new Random();
+        randomFloat = rand.nextFloat();
     }
 
     public void setColor(int resId){
@@ -60,15 +62,22 @@ public class Block extends AppCompatImageButton {
     @Override
     public void setPressed(boolean pressed) {
         super.setPressed(pressed);
+        final MediaPlayer blockSound = MediaPlayer.create(getContext(), R.raw.btn_push2);
+        PlaybackParams params = new PlaybackParams();
+        params.setPitch(Math.max(0.90f, Math.min(1.20f, randomFloat)));
+        blockSound.setPlaybackParams(params);
+        blockSound.setLooping(false);
         float[] array = new float[3];
         if(pressed){
             ColorUtils.colorToHSL(this.ARGBcolor,array);
             array[2] += 0.10f;
             this.shape.setColor(ColorUtils.HSLToColor(array));
+            blockSound.start();
         } else {
             ColorUtils.colorToHSL(this.ARGBcolor,array);
             array[2] -= 0.10f;
             this.shape.setColor(ColorUtils.HSLToColor(array));
+            blockSound.stop();
         }
     }
 
