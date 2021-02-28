@@ -1,7 +1,6 @@
 package com.dut2.memorise.game;
 
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import com.dut2.memorise.game.events.*;
 import com.dut2.memorise.game.utils.MathsUtility;
@@ -9,6 +8,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public abstract class Engine {
+    private final long BASE_TIMER = 2000;
+    private long timeout;
     public static byte LEVEL_WON = 0;
     public static byte LEVEL_LOOSE = 1;
     public static byte END_GAME = 2;
@@ -55,9 +56,8 @@ public abstract class Engine {
                 TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 
-    protected Engine(byte minLightenBlock,
-                     byte maxLives, float weight, boolean timer){
-        this(minLightenBlock, (byte)0, maxLives, weight, timer);
+    protected Engine(byte maxLives, float weight, boolean timer){
+        this((byte)0, (byte)0, maxLives, weight, timer);
     }
 
     public void addBlockThread(Thread thread){
@@ -82,7 +82,7 @@ public abstract class Engine {
             canPause = true;
         });
         if(this.timer){
-            countDownTimer = new CountDownTimer(5000,500){
+            countDownTimer = new CountDownTimer(this.timeout,100){
                 @Override
                 public void onTick(long millisUntilFinished) {
                     Engine.this.iTimer.onTimerChange(millisUntilFinished);
@@ -102,7 +102,7 @@ public abstract class Engine {
 
     public void StartLevel(){
         if(timer){
-            this.iTimer.onTimerInit();
+            this.iTimer.onTimerInit(this.timeout);
         }
         this.iEngine.onInitLevel();
         LoadLevel();
@@ -119,7 +119,7 @@ public abstract class Engine {
             this.iTimer.onTimerFinish();
         }
         if(isLevelWon()){
-            this.iEngine.onEndLevel(true);
+            this.iEngine.onEndLevel(true,this.level);
             // Won level
             // Giving out points
             CalculatePoints();
@@ -134,11 +134,12 @@ public abstract class Engine {
                 this.iEngine.onEndGame(true, this.points);
             }
         } else {
-            this.iEngine.onEndLevel(false);
+            this.iEngine.onEndLevel(false, this.level);
             // Loose Level
             // Check if we have lives !
             this.lives--;
             if(!isGameOver()){
+                if(timer) this.lightenBlocks = 1;
                 this.Reset(Engine.LEVEL_LOOSE);
                 StartLevel();
             } else {
@@ -162,6 +163,7 @@ public abstract class Engine {
             this.lightenBlocks = mapLightenBlocks();
         } else {
             this.lightenBlocks++;
+            this.timeout = this.lightenBlocks * this.BASE_TIMER;
         }
         this.numbersOfBlocks = mapNumberOfBlocks();
         ShufflePattern();
@@ -217,6 +219,9 @@ public abstract class Engine {
             this.ResetLives();
         } else if(resetState == Engine.LEVEL_LOOSE){
             this.level = 1;
+            if(timer){
+                this.lightenBlocks = 0;
+            }
         }else if(resetState == Engine.END_GAME){
             this.level = 1;
             this.ResetLives();
@@ -255,4 +260,5 @@ public abstract class Engine {
     public boolean CanPause(){
         return canPause;
     }
+
 }

@@ -7,7 +7,7 @@ public interface IEngine {
     long onBeforeLevelStart();
     void onStartLevel();
     Runnable onLightenBlocksFinished();
-    void onEndLevel(boolean levelWon);
+    void onEndLevel(boolean levelWon, byte levelCount);
     void onEndGame(boolean gameWon, float points);
     void onReset(byte resetState);
 }

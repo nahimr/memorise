@@ -3,7 +3,6 @@ package com.dut2.memorise.game.thread;
 import com.dut2.memorise.game.view.Block;
 
 public class BlockThread extends Thread{
-    // Make Thread Suspendable !
     private final long TIMER;
     private final Block block;
 

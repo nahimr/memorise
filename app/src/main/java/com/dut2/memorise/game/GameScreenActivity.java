@@ -1,13 +1,15 @@
 package com.dut2.memorise.game;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,28 +29,39 @@ import java.util.*;
 public class GameScreenActivity extends AppCompatActivity {
     private GridLayout blocksLayout;
     private NeumorphCardView levelCardView;
+    private NeumorphCardView notificationPopup;
     private NeumorphCardView pointsCardView;
+    private NeumorphCardView timerCardView;
     private ImageView live1;
     private ImageView live2;
     private ImageView live3;
+    private TextView notifText;
     private TextView pointText;
     private TextView levelText;
     private TextView timerText;
-    Animation firstReversedAnim;
-    Animation firstAnim;
-    Animation secondReversedAnim;
-    Animation secondAnim;
+    private Animation firstReversedAnim;
+    private Animation firstAnim;
+    private Animation secondReversedAnim;
+    private Animation secondAnim;
+    private Animation blockReverseAnim;
+    private byte mode;
     private Engine engine;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
+        getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_game_screen);
-        byte mode = getIntent().getByteExtra("mode",(byte)0);
+        mode = getIntent().getByteExtra("mode",(byte)0);
         levelCardView = findViewById(R.id.levelCardView);
+        notificationPopup = findViewById(R.id.notificationPopup);
         pointsCardView = findViewById(R.id.pointsCardView);
+        timerCardView = findViewById(R.id.timerCardView);
         live1 = findViewById(R.id.live1);
         live2 = findViewById(R.id.live2);
         live3 = findViewById(R.id.live3);
+        notifText = findViewById(R.id.notifText);
         pointText = findViewById(R.id.points);
         levelText = findViewById(R.id.level);
         timerText = findViewById(R.id.timer);
@@ -65,7 +78,8 @@ public class GameScreenActivity extends AppCompatActivity {
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_lives_anim_reverse).getAnimation();
         secondAnim =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_lives_anim).getAnimation();
-
+        blockReverseAnim =
+                AnimationUtils.loadLayoutAnimation(this, R.anim.layout_block_anim_reverse).getAnimation();
         blocksLayout = findViewById(R.id.blocksLayout);
 
         setLevel((byte)1);
@@ -85,6 +99,7 @@ public class GameScreenActivity extends AppCompatActivity {
         IEngine engineListener = new IEngine() {
             @Override
             public void onInitLevel() {
+                GameScreenActivity.this.notifText.setText(R.string.cpuPlaying);
                 GameScreenActivity.this.blocksLayout.removeAllViews();
             }
 
@@ -96,6 +111,12 @@ public class GameScreenActivity extends AppCompatActivity {
                 block.setARGBColor(color);
                 block.setEnabled(false);
                 block.setOnClickListener(engine.getBlockOnClickListener(pos));
+                block.clearAnimation();
+                Animation tempAnim =
+                        AnimationUtils.loadLayoutAnimation(GameScreenActivity.this, R.anim.layout_block_anim)
+                                .getAnimation();
+                tempAnim.setStartOffset(pos * 100);
+                block.setAnimation(tempAnim);
                 blocksLayout.addView(block,dimen,dimen);
             }
 
@@ -106,17 +127,12 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public long onBeforeLevelStart() {
-                GameScreenActivity.this.runOnUiThread(()->
-                        Toast.makeText(GameScreenActivity.this,"Level is starting",
-                                Toast.LENGTH_SHORT).show());
                 return 2000L; // Time to wait before start
             }
 
             @Override
             public void onStartLevel() {
-                GameScreenActivity.this.runOnUiThread(()->
-                        Toast.makeText(GameScreenActivity.this,"Level has started",
-                                Toast.LENGTH_SHORT).show());
+
             }
 
             @Override
@@ -145,13 +161,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onReset(byte resetState) {
-                if(resetState == Engine.LEVEL_WON){
 
-                } else if(resetState == Engine.LEVEL_LOOSE){
-
-                } else if(resetState == Engine.END_GAME){
-
-                }
             }
         };
 
@@ -175,14 +185,15 @@ public class GameScreenActivity extends AppCompatActivity {
 
         ITimer timerListener = new ITimer() {
             @Override
-            public void onTimerInit() {
+            public void onTimerInit(long time) {
+                timerCardView.setVisibility(View.VISIBLE);
                 timerText.setVisibility(View.VISIBLE);
-                timerText.setText("Timer");
+                GameScreenActivity.this.setTimerText(time);
             }
 
             @Override
             public void onTimerChange(long time) {
-                timerText.setText(String.format(getString(R.string.timerValueText),time));
+                GameScreenActivity.this.setTimerText(time);
             }
 
             @Override
@@ -274,6 +285,8 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
     private void loadAnimations(){
+        if(mode == 3) timerCardView.setAnimation(secondAnim);
+        notificationPopup.setAnimation(firstAnim);
         levelCardView.setAnimation(firstAnim);
         pointsCardView.setAnimation(firstAnim);
         live1.setAnimation(secondAnim);
@@ -282,8 +295,10 @@ public class GameScreenActivity extends AppCompatActivity {
     }
 
     private void loadReverseAnimations(){
+        notificationPopup.setAnimation(firstReversedAnim);
         levelCardView.setAnimation(firstReversedAnim);
         pointsCardView.setAnimation(firstReversedAnim);
+        if(mode == 3) timerCardView.setAnimation(secondReversedAnim);
         live1.setAnimation(secondReversedAnim);
         live2.setAnimation(secondReversedAnim);
         live3.setAnimation(secondReversedAnim);
@@ -292,6 +307,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private void clearAnimations(){
         levelCardView.clearAnimation();
         pointsCardView.clearAnimation();
+        timerCardView.clearAnimation();
         live1.clearAnimation();
         live2.clearAnimation();
         live3.clearAnimation();
@@ -312,5 +328,41 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onAnimationRepeat(Animation animation) { }
         });
+    }
+
+    private void showOffBlocks(Runnable runnable){
+        for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
+            View block = this.blocksLayout.getChildAt(i);
+            block.clearAnimation();
+            block.setAnimation(this.blockReverseAnim);
+        }
+        this.blockReverseAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(runnable != null) runnable.run();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        this.blockReverseAnim.startNow();
+    }
+
+    private void setTimerText(long time){
+        String timeFormat = String.format(getString(R.string.timerValueText),time);
+        timerText.setText(timeFormat);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 }

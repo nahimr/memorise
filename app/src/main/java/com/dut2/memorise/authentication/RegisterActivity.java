@@ -1,8 +1,15 @@
 package com.dut2.memorise.authentication;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.Nullable;
@@ -14,6 +21,9 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setEnterTransition(new Explode());
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_auth_register);
         final EditText email = findViewById(R.id.register_email);
         final EditText username = findViewById(R.id.register_username);
@@ -22,7 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
         final Button registerButton = findViewById(R.id.registerButton);
 
         loginButton.setOnClickListener(v -> {
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         });
     }

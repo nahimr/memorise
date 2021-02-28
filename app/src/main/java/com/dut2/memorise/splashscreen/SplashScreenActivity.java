@@ -1,10 +1,13 @@
 package com.dut2.memorise.splashscreen;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.transition.Fade;
+import android.view.Window;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.MenuActivity;
@@ -14,6 +17,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
+        getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_splashscreen);
         int nightModeFlags =
                 this.getResources().getConfiguration().uiMode &
@@ -26,7 +32,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         short TIMEOUT_SPLASH = 3000;
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(SplashScreenActivity.this, MenuActivity.class));
+            startActivity(new Intent(SplashScreenActivity.this, MenuActivity.class),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         }, TIMEOUT_SPLASH);
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +14,12 @@ import androidx.core.graphics.ColorUtils;
 import com.dut2.memorise.R;
 import com.dut2.memorise.game.thread.BlockThread;
 
+import java.util.Random;
+
 public class Block extends AppCompatImageButton {
     private int ARGBcolor;
     private GradientDrawable shape;
+    private float randomFloat = 1.0f;
     public Block(@NonNull Context context) {
         super(context);
         init(context, null, 0);
