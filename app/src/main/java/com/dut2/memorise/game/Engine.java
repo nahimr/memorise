@@ -224,8 +224,8 @@ public abstract class Engine {
         this.iEngine.onReset(resetState);
     }
 
-    public byte getMAX_LEVEL() {
-        return MAX_LEVEL;
+    public boolean isPlayerHasPlayed(){
+        return this.playerAnswer.size() >= this.blockPattern.size();
     }
 
     public byte getMIN_BLOCK() {
