@@ -1,24 +1,31 @@
 package com.dut2.memorise.game;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.gridlayout.widget.GridLayout;
 import com.dut2.memorise.R;
-import com.dut2.memorise.game.adapter.BlockAdapter;
+import com.dut2.memorise.game.events.IChange;
+import com.dut2.memorise.game.events.IEngine;
+import com.dut2.memorise.game.events.ITimer;
 import com.dut2.memorise.game.modes.Easy;
+import com.dut2.memorise.game.modes.Expert;
+import com.dut2.memorise.game.modes.Hard;
+import com.dut2.memorise.game.modes.Timer;
+import com.dut2.memorise.game.view.Block;
 import soup.neumorphism.NeumorphCardView;
 import java.util.*;
 
 public class GameScreenActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private Map<Integer, Boolean> blocs;
+    private GridLayout blocksLayout;
     private NeumorphCardView levelCardView;
     private NeumorphCardView pointsCardView;
     private ImageView live1;
@@ -26,12 +33,12 @@ public class GameScreenActivity extends AppCompatActivity {
     private ImageView live3;
     private TextView pointText;
     private TextView levelText;
-    private BlockAdapter blockAdapter;
+    private TextView timerText;
     Animation firstReversedAnim;
     Animation firstAnim;
     Animation secondReversedAnim;
     Animation secondAnim;
-    private Easy easy;
+    private Engine engine;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +46,12 @@ public class GameScreenActivity extends AppCompatActivity {
         byte mode = getIntent().getByteExtra("mode",(byte)0);
         levelCardView = findViewById(R.id.levelCardView);
         pointsCardView = findViewById(R.id.pointsCardView);
-        recyclerView = findViewById(R.id.blocks);
         live1 = findViewById(R.id.live1);
         live2 = findViewById(R.id.live2);
         live3 = findViewById(R.id.live3);
         pointText = findViewById(R.id.points);
         levelText = findViewById(R.id.level);
+        timerText = findViewById(R.id.timer);
         firstReversedAnim =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_anim_cardview_reverse).getAnimation();
         firstAnim =
@@ -53,15 +60,11 @@ public class GameScreenActivity extends AppCompatActivity {
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_lives_anim_reverse).getAnimation();
         secondAnim =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_lives_anim).getAnimation();
+
+        blocksLayout = findViewById(R.id.blocksLayout);
+
         setLevel((byte)1);
         setPoints(0.0f);
-        blocs = new HashMap<>();
-        blockAdapter = new BlockAdapter(this, blocs);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,5));
-        recyclerView.setAdapter(blockAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.suppressLayout(true);
-        recyclerView.setNestedScrollingEnabled(false);
         loadLives((byte)3);
         firstReversedAnim.setDuration(500);
         secondReversedAnim.setDuration(500);
