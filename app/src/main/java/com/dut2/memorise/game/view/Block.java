@@ -66,4 +66,7 @@ public class Block extends AppCompatImageButton {
             this.shape.setColor(ColorUtils.HSLToColor(array));
         }
     }
-}
+
+    public BlockThread PressedThread(long TIMER){
+        return new BlockThread(this,TIMER);
+    }
