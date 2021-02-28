@@ -198,10 +198,8 @@ public abstract class Engine {
         this.playerAnswer.add(state);
     }
 
-    public void setPlayerBlockStateAtPos(int pos, byte state){
-        if(pos > this.lightenBlocks &&
-                state > this.numbersOfBlocks) return;
-        this.playerAnswer.set(pos,state);
+    private void ResetLives(){
+        this.lives = this.maxLives;
     }
 
     public boolean isPlayerHasPlayed(){
