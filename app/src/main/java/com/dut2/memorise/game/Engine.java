@@ -73,8 +73,16 @@ public abstract class Engine {
                     Engine.this.iTimer.onTimerChange(millisUntilFinished);
                 }
 
-    public void StartGame(IGameStarted iGameStarted){
-        iGameStarted.onGameStarted();
+                @Override
+                public void onFinish() {
+                    Engine.this.iTimer.onTimerTimeout();
+                    Engine.this.lives = 0;
+                }
+            };
+            this.threadPoolExecutor.submit((Runnable) countDownTimer::start);
+        }
+
+        this.blockThreadList.clear();
     }
 
     public void StartLevel(){
