@@ -41,14 +41,17 @@ public abstract class Engine {
         this.maxLives = maxLives;
         this.lightenBlocks = minLightenBlock;
         this.numbersOfBlocks = MIN_BLOCK;
-        this.lives = MAX_LIVES;
+        this.lives = maxLives;
         this.level = (byte)1;
-        this.POINTS = 0.0f;
-        this.buttonsState = new ArrayList<>();
+        this.points = 0.0f;
+        this.blockPattern = new ArrayList<>();
         this.playerAnswer = new ArrayList<>();
-        this.MODE_CODE = MODE_CODE;
-        this.WEIGHT = WEIGHT;
-        this.TIMER = TIMER;
+        this.weight = weight;
+        this.timer = timer;
+        blockThreadList = new LinkedBlockingQueue<>();
+        this.canPause = false;
+        this.threadPoolExecutor = new ThreadPoolExecutor(1, 1, 1000,
+                TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 
     protected Engine(byte minLightenBlock,
