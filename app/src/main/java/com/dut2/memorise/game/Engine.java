@@ -49,9 +49,29 @@ public abstract class Engine {
         this.lives = this.MAX_LIVES;
     }
 
-    private void ResetPoints(){
-        this.POINTS = 0;
-    }
+    private void LightBlocks(){
+        this.threadPoolExecutor.purge();
+        this.threadPoolExecutor.submit(new Thread(()->{
+            try {
+                Thread.sleep(this.iEngine.onBeforeLevelStart());
+                this.iEngine.onStartLevel();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }));
+        for (Runnable runnable: this.blockThreadList){
+            this.threadPoolExecutor.submit(runnable);
+        }
+        this.threadPoolExecutor.submit(this.iEngine.onLightenBlocksFinished());
+        this.threadPoolExecutor.submit(()->{
+            canPause = true;
+        });
+        if(this.timer){
+            countDownTimer = new CountDownTimer(5000,500){
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    Engine.this.iTimer.onTimerChange(millisUntilFinished);
+                }
 
     public void StartGame(IGameStarted iGameStarted){
         iGameStarted.onGameStarted();
