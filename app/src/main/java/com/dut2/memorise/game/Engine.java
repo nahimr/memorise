@@ -45,8 +45,13 @@ public abstract class Engine {
         this.TIMER = TIMER;
     }
 
-    private void ResetLives(){
-        this.lives = this.MAX_LIVES;
+    protected Engine(byte minLightenBlock,
+                     byte maxLives, float weight, boolean timer){
+        this(minLightenBlock, (byte)0, maxLives, weight, timer);
+    }
+
+    public void addBlockThread(Thread thread){
+        this.blockThreadList.add(thread);
     }
 
     private void LightBlocks(){
