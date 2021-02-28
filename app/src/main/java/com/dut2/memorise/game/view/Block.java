@@ -10,12 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.graphics.ColorUtils;
 import com.dut2.memorise.R;
+import com.dut2.memorise.game.thread.BlockThread;
 
 public class Block extends AppCompatImageButton {
     private int ARGBcolor;
     private GradientDrawable shape;
     public Block(@NonNull Context context) {
         super(context);
+        init(context, null, 0);
     }
 
     public Block(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -36,7 +38,10 @@ public class Block extends AppCompatImageButton {
         assert shape != null;
         shape.mutate();
         this.ARGBcolor = a.getColor(R.styleable.Block_color,0);
-        shape.setColor(this.ARGBcolor);
+        float[] array = new float[3];
+        ColorUtils.colorToHSL(this.ARGBcolor,array);
+        array[2] -= 0.10f;
+        this.shape.setColor(ColorUtils.HSLToColor(array));
         this.setBackground(null);
         this.setScaleType(ScaleType.CENTER_INSIDE);
         a.recycle();
@@ -70,3 +75,5 @@ public class Block extends AppCompatImageButton {
     public BlockThread PressedThread(long TIMER){
         return new BlockThread(this,TIMER);
     }
+
+}
