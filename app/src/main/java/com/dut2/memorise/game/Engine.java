@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.Random;
 
 public abstract class Engine {
-    private final byte MODE_CODE;
+    public static byte LEVEL_WON = 0;
+    public static byte LEVEL_LOOSE = 1;
+    public static byte END_GAME = 2;
     private final byte MAX_LEVEL = 7;
     private final byte MIN_BLOCK = 4;
     private final byte MAX_BLOCK = 10;
