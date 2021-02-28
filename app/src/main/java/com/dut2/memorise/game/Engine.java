@@ -157,17 +157,21 @@ public abstract class Engine {
         this.POINTS += this.level * this.WEIGHT;
     }
 
-    public void NextLevel(){
-        /*
-        TODO: Peut se rééclairer sur le même block
-        Prévoire liste d'entier
-         */
-        this.level++;
-        this.lightenBlocks = mapLightenBlocks(this.level);
-        this.numbersOfBlocks = mapNumberOfBlocks(this.level);
-        this.ResetLives();
-        this.ClearLists();
-        //StartLevel();
+    private void LoadLevel(){
+        if(!timer){
+            this.lightenBlocks = mapLightenBlocks();
+        } else {
+            this.lightenBlocks++;
+        }
+        this.numbersOfBlocks = mapNumberOfBlocks();
+        ShufflePattern();
+        this.iChange.onChangeLevelsListener(this.level);
+        for (byte pos = 0; pos < this.numbersOfBlocks; pos++) {
+            this.iEngine.onLoadBlock(pos);
+        }
+        for (byte pos: this.blockPattern) {
+            this.iEngine.onLoadLightenBlock(pos);
+        }
     }
 
     private byte mapLightenBlocks(byte level){
