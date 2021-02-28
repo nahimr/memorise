@@ -104,26 +104,104 @@ public class GameScreenActivity extends AppCompatActivity {
                 return 2000L; // Time to wait before start
             }
 
-            blockAdapter.notifyDataSetChanged();
-            blockAdapter.RunThat();
+            @Override
+            public void onStartLevel() {
+                GameScreenActivity.this.runOnUiThread(()->
+                        Toast.makeText(GameScreenActivity.this,"Level has started",
+                                Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public Runnable onLightenBlocksFinished() {
+                return GameScreenActivity.this.OnExecutionBlocksFinished();
+            }
+
+            @Override
+            public void onEndLevel(boolean levelWon) {
+            }
+
+            @Override
+            public void onEndGame(boolean gameWon, float points) {
+                String endMessage = "%s:%.2f Points";
+                Toast.makeText(GameScreenActivity.this,
+                        gameWon?String.format(endMessage,"Win",points):
+                                String.format(endMessage,"Loose",points),
+                        Toast.LENGTH_LONG).show();
+                GameScreenActivity.this.finish();
+            }
+
+            @Override
+            public void onReset(byte resetState) {
+                if(resetState == Engine.LEVEL_WON){
+
+                } else if(resetState == Engine.LEVEL_LOOSE){
+
+                } else if(resetState == Engine.END_GAME){
+
+                }
+            }
+        };
+
+        IChange changeListener = new IChange() {
+            @Override
+            public void onChangeLivesListener(byte numberOfLives) {
+                GameScreenActivity.this.runOnUiThread(()->
+                        GameScreenActivity.this.loadLives(numberOfLives));
+            }
+            @Override
+            public void onChangePointsListener(float numberOfPoints){
+                GameScreenActivity.this.runOnUiThread(()->
+                        GameScreenActivity.this.setPoints(numberOfPoints));
+            }
+            @Override
+            public void onChangeLevelsListener(byte levelNumber){
+                GameScreenActivity.this.runOnUiThread(()->
+                        GameScreenActivity.this.setLevel(levelNumber));
+            }
+        };
+
+        ITimer timerListener = new ITimer() {
+            @Override
+            public void onTimerInit() {
+                timerText.setVisibility(View.VISIBLE);
+                timerText.setText("Timer");
+            }
+
+            @Override
+            public void onTimerChange(long time) {
+                timerText.setText(String.format(getString(R.string.timerValueText),time));
+            }
+
+            @Override
+            public void onTimerTimeout() {
+                timerText.setText("Timeout!");
+            }
+
+            @Override
+            public void onTimerFinish() {
+                timerText.setVisibility(View.INVISIBLE);
+            }
+        };
+
+        if(mode == 0) {
+            engine = new Easy();
+            engine.setOnEventListener(engineListener);
+            engine.setOnChangeListener(changeListener);
+        } else if (mode == 1){
+            engine = new Hard();
+            engine.setOnEventListener(engineListener);
+            engine.setOnChangeListener(changeListener);
+        } else if(mode == 2){
+            engine = new Expert();
+            engine.setOnEventListener(engineListener);
+            engine.setOnChangeListener(changeListener);
+        } else if(mode == 3){
+            engine = new Timer();
+            engine.setOnEventListener(engineListener);
+            engine.setOnChangeListener(changeListener);
+            engine.setOnTimerChangeListener(timerListener);
         }
-    }
-
-
-
-    public void LoadLevel(){
-        populateBlocks(easy.getNumbersOfBlocks());
-        for (int i:easy.getButtonsState()) {
-
-            blocs.put(i,true);
-        }
-        blockAdapter.notifyDataSetChanged();
-    }
-
-    public void Reset(){
-        easy.Reset();
-        setLevel(easy.getLevel());
-        setPoints(easy.getPOINTS());
+        engine.StartLevel();
     }
 
     public void setLevel(byte level){
