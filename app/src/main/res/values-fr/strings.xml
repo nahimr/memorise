@@ -16,5 +16,10 @@
     <string name="levelText">"Niveau : %d "</string>
     <string name="pointsText">"Points : %.1f "</string>
     <string name="exitDialog">Êtes de vous sur de quitter ?</string>
-    <string name="timerValueText">Chrono : %d</string>
+    <string name="timerValueText">Chrono : %1$tS.%1$tL</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="playAgain">Veux-tu refaire une partie ?</string>
+    <string name="yourTurn">À ton tour !</string>
+    <string name="cpuPlaying">L\'ordinateur joue !</string>
 </resources>

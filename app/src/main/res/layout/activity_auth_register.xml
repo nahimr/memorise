@@ -216,7 +216,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/logo_menu"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             app:srcCompat="@drawable/neumorphic_light_logo" />
