@@ -110,7 +110,13 @@ public abstract class Engine {
         this.iChange.onChangeLivesListener(this.lives);
     }
 
-    public void EndGame(ILevel iLevel, IGameEnded iGameEnded){
+    private void EndLevel(){
+        if(!timer){
+            if(!isPlayerHasPlayed()) return;
+        } else {
+            countDownTimer.cancel();
+            this.iTimer.onTimerFinish();
+        }
         if(isLevelWon()){
             // Won level
             iLevel.onLevelFinished(true);
