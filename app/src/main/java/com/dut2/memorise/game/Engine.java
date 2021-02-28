@@ -100,10 +100,14 @@ public abstract class Engine {
     }
 
     public void StartLevel(){
-        RandomizeBlocksState();
-        Log.i("DEBUG::", "l:"+this.level +" lb:" + this.lightenBlocks
-                +"nB:" +this.numbersOfBlocks + " "+ this.buttonsState.toString() +
-                ":");
+        if(timer){
+            this.iTimer.onTimerInit();
+        }
+        this.iEngine.onInitLevel();
+        LoadLevel();
+        LightBlocks();
+        this.iChange.onChangeLevelsListener(this.level);
+        this.iChange.onChangeLivesListener(this.lives);
     }
 
     public void EndGame(ILevel iLevel, IGameEnded iGameEnded){
