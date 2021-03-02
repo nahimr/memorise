@@ -125,14 +125,21 @@ public abstract class Engine {
             CalculatePoints();
             this.iChange.onChangePointsListener(this.points);
             // Check if there is another level
-            if((this.level + 1)<= this.MAX_LEVEL){
+            if(!timer){
+                if((this.level + 1)<= this.MAX_LEVEL){
+                    this.Reset(Engine.LEVEL_WON);
+                    this.level++;
+                    StartLevel();
+                } else {
+                    this.iEngine.onEndGame(true, this.points);
+                    this.Reset(Engine.END_GAME);
+                }
+            }else{
                 this.Reset(Engine.LEVEL_WON);
                 this.level++;
                 StartLevel();
-            } else {
-                this.Reset(Engine.END_GAME);
-                this.iEngine.onEndGame(true, this.points);
             }
+
         } else {
             this.iEngine.onEndLevel(false, this.level);
             // Loose Level
@@ -143,8 +150,8 @@ public abstract class Engine {
                 this.Reset(Engine.LEVEL_LOOSE);
                 StartLevel();
             } else {
-                this.Reset(Engine.END_GAME);
                 this.iEngine.onEndGame(false, this.points);
+                this.Reset(Engine.END_GAME);
             }
         }
         this.iChange.onChangeLivesListener(this.lives);
@@ -165,7 +172,7 @@ public abstract class Engine {
             this.lightenBlocks++;
             this.timeout = this.lightenBlocks * this.BASE_TIMER;
         }
-        this.numbersOfBlocks = mapNumberOfBlocks();
+        this.numbersOfBlocks = MathsUtility.clamp(mapNumberOfBlocks(),MIN_BLOCK,MAX_BLOCK);
         ShufflePattern();
         this.iChange.onChangeLevelsListener(this.level);
         for (byte pos = 0; pos < this.numbersOfBlocks; pos++) {
