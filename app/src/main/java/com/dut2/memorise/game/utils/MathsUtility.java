@@ -7,4 +7,9 @@ public final class MathsUtility{
         byte divide = (byte) (partA / partB);
         return (byte) (c + (divide* (t-a)));
     }
+
+    public static byte clamp(byte val, byte min, byte max) {
+        return (byte) Math.max(min, Math.min(max, val));
+    }
+
 }
