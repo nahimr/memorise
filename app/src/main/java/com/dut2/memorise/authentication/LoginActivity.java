@@ -5,14 +5,15 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import com.dut2.memorise.MenuActivity;
 import com.dut2.memorise.R;
+import com.dut2.memorise.authentication.utils.UserRepository;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -27,6 +28,17 @@ public class LoginActivity extends AppCompatActivity{
         final EditText password = findViewById(R.id.login_password);
         final Button loginButton = findViewById(R.id.login_loginButton);
         final Button registerButton = findViewById(R.id.login_registerButton);
+        loginButton.setOnClickListener(v->
+                UserRepository.getInstance().authUser(this, email.getText().toString(),
+                        password.getText().toString(),
+                task -> {
+                    if(task.isSuccessful()){
+                        startActivity(new Intent(LoginActivity.this, MenuActivity.class),
+                                ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                    }else {
+                        Toast.makeText(this, "Wrong password or email !", Toast.LENGTH_SHORT).show();
+                    }
+                }, e -> Toast.makeText(this, "Erreur de connexion !", Toast.LENGTH_SHORT).show()));
 
         registerButton.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class),

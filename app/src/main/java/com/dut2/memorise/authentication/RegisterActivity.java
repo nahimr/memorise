@@ -3,21 +3,20 @@ package com.dut2.memorise.authentication;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.view.View;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.R;
+import com.dut2.memorise.authentication.utils.User;
+import com.dut2.memorise.authentication.utils.UserRepository;
 
 public class RegisterActivity extends AppCompatActivity {
-
+    private User user;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +29,15 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText password = findViewById(R.id.register_password);
         final Button loginButton = findViewById(R.id.loginButton);
         final Button registerButton = findViewById(R.id.registerButton);
+
+        registerButton.setOnClickListener(v -> {
+            user = new User(email.getText().toString(),
+                    username.getText().toString(), password.getText().toString());
+            UserRepository.getInstance().addUser(this, user, (error, databaseReference) ->
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle()),
+                    e -> Log.e("Memorise","Error registering !", e));
+        });
 
         loginButton.setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class),
