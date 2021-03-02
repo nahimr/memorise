@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.MenuActivity;
 import com.dut2.memorise.R;
+import com.dut2.memorise.authentication.LoginActivity;
+import com.dut2.memorise.authentication.utils.UserRepository;
 
 public class SplashScreenActivity extends AppCompatActivity {
     @Override
@@ -32,7 +34,12 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         short TIMEOUT_SPLASH = 3000;
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(SplashScreenActivity.this, MenuActivity.class),
+            Intent whereToGo = new Intent(SplashScreenActivity.this, LoginActivity.class);
+            if(UserRepository.getInstance().isCurrentUserExists()){
+                whereToGo = new Intent(SplashScreenActivity.this, MenuActivity.class);
+            }
+
+            startActivity(whereToGo,
                     ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             finish();
         }, TIMEOUT_SPLASH);
