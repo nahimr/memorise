@@ -252,6 +252,9 @@ public class GameScreenActivity extends AppCompatActivity {
         dialog.setMessage(R.string.exitDialog);
         dialog.setPositiveButton(R.string.yes, (dialog1, which) ->{
             MediaPlayer.create(this, R.raw.player_start).start();
+            GameScreenActivity.this.runOnUiThread(()->
+                    UserRepository.getInstance().updateUserScore(engine.getPoints(), task -> {
+                    }, e -> Log.e("Memorise","Error!",e)));
             engine.KillThreads();
             this.showOffBlocks(()-> startReverseAnimations(this::finish));
         }).setNegativeButton(R.string.no,(dialog1, which)->
@@ -372,4 +375,6 @@ public class GameScreenActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(0, 0);
     }
+
+
 }

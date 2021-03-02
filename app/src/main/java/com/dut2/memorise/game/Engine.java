@@ -264,8 +264,7 @@ public abstract class Engine {
         this.threadPoolExecutor.shutdownNow();
     }
 
-    public boolean CanPause(){
-        return canPause;
+    public float getPoints() {
+        return points;
     }
-
 }
