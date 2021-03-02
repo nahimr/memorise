@@ -4,17 +4,21 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.transition.Fade;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 import com.dut2.memorise.R;
+import com.dut2.memorise.authentication.LoginActivity;
+import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.events.IChange;
 import com.dut2.memorise.game.events.IEngine;
 import com.dut2.memorise.game.events.ITimer;
@@ -149,6 +153,9 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onEndGame(boolean gameWon, float points) {
+                GameScreenActivity.this.runOnUiThread(()->
+                        UserRepository.getInstance().updateUserScore(points, task -> {
+                }, e -> Log.e("Memorise","Error!",e)));
                 AlertDialog.Builder dialog = new AlertDialog.Builder(GameScreenActivity.this);
                 dialog.setTitle(R.string.app_name);
                 dialog.setMessage(R.string.playAgain);
