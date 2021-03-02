@@ -8,14 +8,14 @@ import android.transition.Fade;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.dut2.memorise.authentication.LoginActivity;
+import com.dut2.memorise.authentication.UserActivity;
 import com.dut2.memorise.game.GameOptionsActivity;
+import com.dut2.memorise.game.LeaderboardActivity;
 
 public class MenuActivity extends AppCompatActivity {
-    private ImageButton connectButton;
+    private ImageButton userButton;
     private Button playButton;
     private Button leaderboardButton;
     private MediaPlayer menuSound;
@@ -26,7 +26,7 @@ public class MenuActivity extends AppCompatActivity {
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_menu);
-        connectButton = findViewById(R.id.connectButton);
+        userButton = findViewById(R.id.connectButton);
         playButton = findViewById(R.id.playButton);
         leaderboardButton = findViewById(R.id.leaderboardButton);
         menuSound = MediaPlayer.create(this, R.raw.game_menu);
@@ -35,10 +35,10 @@ public class MenuActivity extends AppCompatActivity {
         menuSound.start();
 
         final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.btn_push);
-        connectButton.setOnClickListener(v ->{
+        userButton.setOnClickListener(v ->{
             buttonSound.start();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
-            startActivity(new Intent(MenuActivity.this, LoginActivity.class),
+            startActivity(new Intent(MenuActivity.this, UserActivity.class),
                     options.toBundle());
         });
 
@@ -46,6 +46,12 @@ public class MenuActivity extends AppCompatActivity {
             buttonSound.start();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             startActivity(new Intent(MenuActivity.this, GameOptionsActivity.class),
+                    options.toBundle());
+        });
+
+        leaderboardButton.setOnClickListener(v -> {
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(new Intent(MenuActivity.this, LeaderboardActivity.class),
                     options.toBundle());
         });
     }
