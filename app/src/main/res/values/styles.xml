@@ -35,6 +35,7 @@
         <item name="editTextStyle">@style/NeumorphicDark.EditText</item>
         <item name="bgColorConnectionBtn">@color/bgColorConnectionBtnDark</item>
         <item name="inverseColor">@color/solid_dark_color</item>
+        <item name="inverseColorSecond">@color/solid_light_color</item>
     </style>
 
     <style name="NeumorphicLight" parent="MemoriseBaseTheme">
@@ -48,6 +49,7 @@
         <item name="editTextStyle">@style/NeumorphicLight.EditText</item>
         <item name="bgColorConnectionBtn">@color/bgColorConnectionBtn</item>
         <item name="inverseColor">@color/solid_light_color</item>
+        <item name="inverseColorSecond">@color/solid_dark_color</item>
         <item name="textViewStyleInGame">@style/NeumorphicLight.TextView.InGame</item>
     </style>
 

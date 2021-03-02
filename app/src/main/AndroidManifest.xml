@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dut2.memorise">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +20,8 @@
         <activity android:name=".authentication.LoginActivity" android:screenOrientation="landscape"/>
         <activity android:name=".game.GameOptionsActivity" android:screenOrientation="landscape"/>
         <activity android:name=".game.GameScreenActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".authentication.UserActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".game.LeaderboardActivity" android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

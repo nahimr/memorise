@@ -33,11 +33,8 @@ public class GameOptionsActivity extends AppCompatActivity {
         Intent intent = new Intent(GameOptionsActivity.this,
                 GameScreenActivity.class);
         easyButton.setOnClickListener(v -> LoadGameMode(intent,(byte)0));
-
         hardButton.setOnClickListener(v -> LoadGameMode(intent,(byte)1));
-
         expertButton.setOnClickListener(v->LoadGameMode(intent,(byte)2));
-
         timerButton.setOnClickListener(v->LoadGameMode(intent,(byte)3));
     }
 
@@ -56,7 +53,6 @@ public class GameOptionsActivity extends AppCompatActivity {
         MediaPlayer.create(this, R.raw.player_start).start();
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -68,6 +64,5 @@ public class GameOptionsActivity extends AppCompatActivity {
         super.onResume();
         gameOptionSound.start();
     }
-
 
 }

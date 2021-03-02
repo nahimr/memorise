@@ -9,6 +9,7 @@
         <attr name="editTextStyle" format="reference" />
         <attr name="bgColorConnectionBtn" format="color"/>
         <attr name="inverseColor" format="color"/>
+        <attr name="inverseColorSecond" format="color"/>
         <attr name="textViewStyleInGame" format="reference"/>
     </declare-styleable>
 

@@ -22,4 +22,11 @@
     <string name="playAgain">Veux-tu refaire une partie ?</string>
     <string name="yourTurn">À ton tour !</string>
     <string name="cpuPlaying">L\'ordinateur joue !</string>
+    <string name="disconnect">Déconnexion</string>
+    <string name="deleteAccount">Supprimer le compte</string>
+    <string name="usernameValue">Nom d\'utilisateur: %s</string>
+    <string name="scoreValue">Score: %.2f points</string>
+    <string name="connectionErrDB">Erreur de connexion à la base de donnée</string>
+    <string name="idText">ID</string>
+    <string name="scoreText">Score</string>
 </resources>

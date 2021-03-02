@@ -17,4 +17,5 @@
     <color name="hardColor">#fbc531</color>
     <color name="expertColor">#e84118</color>
     <color name="timerColor">#c23616</color>
+    <color name="deleteButton">#D20404</color>
 </resources>

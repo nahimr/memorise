@@ -22,4 +22,11 @@
     <string name="playAgain">Do you want to play again ?</string>
     <string name="yourTurn">Your turn !</string>
     <string name="cpuPlaying">CPU is playing !</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="deleteAccount">Delete Account</string>
+    <string name="usernameValue">Username: %s</string>
+    <string name="scoreValue">Score: %.2f points</string>
+    <string name="connectionErrDB">Database connection error !</string>
+    <string name="idText">ID</string>
+    <string name="scoreText">Score</string>
 </resources>
