@@ -1,6 +1,7 @@
 package com.dut2.memorise.game;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import com.dut2.memorise.game.events.*;
 import com.dut2.memorise.game.utils.MathsUtility;
@@ -10,14 +11,15 @@ import java.util.concurrent.*;
 public abstract class Engine {
     private final long BASE_TIMER = 2000;
     private long timeout;
-    public static byte LEVEL_WON = 0;
-    public static byte LEVEL_LOOSE = 1;
-    public static byte END_GAME = 2;
+    public static final byte START_LEVEL = 0;
+    public static final byte START_PATTERN = 1;
+    public static final byte END_PATTERN = 2;
     private final byte MAX_LEVEL = 7;
     private final byte MIN_BLOCK = 4;
     private final byte MAX_BLOCK = 10;
+    private byte lightenBlockCounter = 1;
     private final byte minLightenBlock;
-    protected byte maxLightenBlock;
+    protected final byte maxLightenBlock;
     private final byte maxLives;
     private final float weight;
     private final boolean timer;
@@ -27,14 +29,13 @@ public abstract class Engine {
     private byte numbersOfBlocks;
     private final BlockingQueue<Runnable> blockThreadList;
     public final ThreadPoolExecutor threadPoolExecutor;
-    private final ArrayList<Byte> blockPattern;
+    private final ArrayList<Byte> lightPattern;
     private final ArrayList<Byte> playerAnswer;
     private byte level;
     private CountDownTimer countDownTimer;
     protected IEngine iEngine;
     private IChange iChange;
     private ITimer iTimer;
-    private boolean canPause;
     protected Engine(byte minLightenBlock,
                      byte maxLightenBlock,
                      byte maxLives, float weight, boolean timer) {
@@ -46,18 +47,17 @@ public abstract class Engine {
         this.lives = maxLives;
         this.level = (byte)1;
         this.points = 0.0f;
-        this.blockPattern = new ArrayList<>();
+        this.lightPattern = new ArrayList<>();
         this.playerAnswer = new ArrayList<>();
         this.weight = weight;
         this.timer = timer;
         blockThreadList = new LinkedBlockingQueue<>();
-        this.canPause = false;
         this.threadPoolExecutor = new ThreadPoolExecutor(1, 1, 1000,
                 TimeUnit.SECONDS, new LinkedBlockingQueue<>());
     }
 
-    protected Engine(byte maxLives, float weight, boolean timer){
-        this((byte)0, (byte)0, maxLives, weight, timer);
+    protected Engine(byte maxLives, byte maxLightenBlock, float weight, boolean timer){
+        this((byte)1, maxLightenBlock, maxLives, weight, timer);
     }
 
     public void addBlockThread(Thread thread){
@@ -69,7 +69,6 @@ public abstract class Engine {
         this.threadPoolExecutor.submit(new Thread(()->{
             try {
                 Thread.sleep(this.iEngine.onBeforeLevelStart());
-                this.iEngine.onStartLevel();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -78,10 +77,8 @@ public abstract class Engine {
             this.threadPoolExecutor.submit(runnable);
         }
         this.threadPoolExecutor.submit(this.iEngine.onLightenBlocksFinished());
-        this.threadPoolExecutor.submit(()->{
-            canPause = true;
-        });
         if(this.timer){
+            // Refresh ratio settled to 100 ms
             countDownTimer = new CountDownTimer(this.timeout,100){
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -91,68 +88,111 @@ public abstract class Engine {
                 @Override
                 public void onFinish() {
                     Engine.this.iTimer.onTimerTimeout();
+                    Engine.this.iEngine.onEndGame(true,Engine.this.points);
+                    // TODO : Lives equal to 0 ? check this shit
                     Engine.this.lives = 0;
                 }
             };
             this.threadPoolExecutor.submit((Runnable) countDownTimer::start);
         }
-
         this.blockThreadList.clear();
     }
 
     public void StartLevel(){
+        this.Reset(Engine.START_LEVEL);
+        Log.d("Memorise", "Start Level");
         if(timer){
             this.iTimer.onTimerInit(this.timeout);
         }
-        this.iEngine.onInitLevel();
+        this.iEngine.onStartLevel();
         LoadLevel();
-        LightBlocks();
         this.iChange.onChangeLevelsListener(this.level);
         this.iChange.onChangeLivesListener(this.lives);
+        StartPattern();
     }
 
-    private void EndLevel(){
+    private void StartPattern(){
+        this.Reset(Engine.START_PATTERN);
+        // Add to block pattern new lighten block
+        Log.d("Memorise", "Start Pattern");
+        LoadPattern();
+        LightBlocks();
+        this.iEngine.onStartPattern();
+    }
+
+    private void EndPattern(){
+        Log.d("Memorise", "End Pattern");
+        // Check if this is the correct pattern
         if(!timer){
             if(!isPlayerHasPlayed()) return;
         } else {
             countDownTimer.cancel();
             this.iTimer.onTimerFinish();
         }
-        if(isLevelWon()){
-            this.iEngine.onEndLevel(true,this.level);
-            // Won level
-            // Giving out points
-            CalculatePoints();
-            this.iChange.onChangePointsListener(this.points);
-            // Check if there is another level
-            if(!timer){
-                if((this.level + 1)<= this.MAX_LEVEL){
-                    this.Reset(Engine.LEVEL_WON);
+
+        if(isPatternWon()){
+            this.lives = this.maxLives;
+            this.iEngine.onEndPattern(true);
+            if(this.lightenBlocks == maxLightenBlock){ // Is last pattern ?
+                EndLevel(true);
+            }else{
+                StartPattern();
+            }
+        } else {
+            // Reset to first level
+            EndLevel(false);
+            this.iEngine.onEndPattern(false);
+        }
+        this.Reset(Engine.END_PATTERN);
+        this.iChange.onChangeLivesListener(this.lives);
+    }
+
+    private void NextPattern(){
+        // Add pattern !
+        if(!timer){
+            if(this.lightenBlocks == this.maxLightenBlock){
+                this.lightenBlocks = this.minLightenBlock;
+            } else {
+                this.lightenBlocks = mapLightenBlocks(this.lightenBlockCounter);
+                lightenBlockCounter++;
+            }
+        } else {
+            this.lightenBlocks++;
+            this.timeout = this.lightenBlocks * this.BASE_TIMER;
+        }
+    }
+
+    private void EndLevel(boolean isLevelWon){
+        Log.d("Memorise", "End level");
+
+        // Giving out points
+        CalculatePoints();
+
+        // Calling delegates !
+        this.iChange.onChangePointsListener(this.points);
+        this.iEngine.onEndLevel(true,this.level);
+
+        if(!isGameOver()){ // Is Player Game Over ?
+            if(isLevelWon){ // Has Player Won level ?
+                if(!timer){ // Does mode haven't got timer ?
+                    if((this.level + 1) <= this.MAX_LEVEL){ // Check if max level reached out
+                        this.level++;
+                        StartLevel();
+                    } else {
+                        this.iEngine.onEndGame(true, this.points);
+                    }
+                }else{
+                    this.lightenBlocks = minLightenBlock;
                     this.level++;
                     StartLevel();
-                } else {
-                    this.iEngine.onEndGame(true, this.points);
-                    this.Reset(Engine.END_GAME);
                 }
-            }else{
-                this.Reset(Engine.LEVEL_WON);
-                this.level++;
-                StartLevel();
-            }
-
-        } else {
-            this.iEngine.onEndLevel(false, this.level);
-            // Loose Level
-            // Check if we have lives !
-            this.lives--;
-            if(!isGameOver()){
-                if(timer) this.lightenBlocks = 1;
-                this.Reset(Engine.LEVEL_LOOSE);
-                StartLevel();
             } else {
-                this.iEngine.onEndGame(false, this.points);
-                this.Reset(Engine.END_GAME);
+                this.level = 1;
+                this.lives--;
+                StartLevel();
             }
+        } else {
+            this.iEngine.onEndGame(false, this.points);
         }
         this.iChange.onChangeLivesListener(this.lives);
     }
@@ -166,85 +206,72 @@ public abstract class Engine {
     }
 
     private void LoadLevel(){
-        if(!timer){
-            this.lightenBlocks = mapLightenBlocks();
-        } else {
-            this.lightenBlocks++;
-            this.timeout = this.lightenBlocks * this.BASE_TIMER;
-        }
         this.numbersOfBlocks = MathsUtility.clamp(mapNumberOfBlocks(),MIN_BLOCK,MAX_BLOCK);
-        ShufflePattern();
         this.iChange.onChangeLevelsListener(this.level);
         for (byte pos = 0; pos < this.numbersOfBlocks; pos++) {
             this.iEngine.onLoadBlock(pos);
         }
-        for (byte pos: this.blockPattern) {
-            this.iEngine.onLoadLightenBlock(pos);
-        }
     }
 
-    private byte mapLightenBlocks(){
-        return MathsUtility.mapping(this.level, (byte)1, MAX_LEVEL, minLightenBlock, maxLightenBlock);
+    private void LoadPattern(){
+        NextPattern();
+        ShufflePattern();
+    }
+
+    private byte mapLightenBlocks(byte value){
+        return MathsUtility.mapping(value, (byte)1, MAX_LEVEL, minLightenBlock, maxLightenBlock);
     }
 
     private byte mapNumberOfBlocks(){
         return MathsUtility.mapping(this.level, (byte)1, MAX_LEVEL, MIN_BLOCK,MAX_BLOCK);
     }
 
-    private boolean isLevelWon(){
-        return this.blockPattern.equals(this.playerAnswer);
+    private boolean isPatternWon(){
+        return this.lightPattern.equals(this.playerAnswer);
     }
 
     private void ShufflePattern(){
-        for (byte i = 0; i < this.lightenBlocks; i++) {
+        List<Byte> lightPatternToAdd = new ArrayList<>();
+        for(byte i = (byte)this.lightPattern.size(); i < this.lightenBlocks; i++){
             Random random = new Random();
-            this.blockPattern.add((byte)(Math.abs(random.nextInt())%this.numbersOfBlocks));
+            lightPatternToAdd.add((byte)(Math.abs(random.nextInt())%this.numbersOfBlocks));
         }
-        Collections.shuffle(this.blockPattern);
+        Collections.shuffle(lightPatternToAdd);
+        this.lightPattern.addAll(lightPatternToAdd);
+        Log.d("Memorise","Light Pattern:"+this.lightPattern.toString());
+        this.lightPattern.forEach(aByte -> this.iEngine.onLoadLightenBlock(aByte));
     }
 
     public void addPlayerBlockAnswerAtPos(byte state){
         this.playerAnswer.add(state);
     }
 
-    private void ResetLives(){
-        this.lives = this.maxLives;
-    }
-
-    private void ResetPoints(){
-        this.points = 0;
-    }
-
-    public void ClearLists(){
-        this.playerAnswer.clear();
-        this.blockPattern.clear();
-    }
-
     public void Reset(byte resetState){
-        this.ClearLists();
-        if (resetState == Engine.LEVEL_WON){
-            this.ResetLives();
-        } else if(resetState == Engine.LEVEL_LOOSE){
-            this.level = 1;
-            if(timer){
-                this.lightenBlocks = 0;
-            }
-        }else if(resetState == Engine.END_GAME){
-            this.level = 1;
-            this.ResetLives();
-            this.ResetPoints();
+        switch (resetState){
+            case Engine.START_LEVEL:
+                this.lightenBlocks = minLightenBlock;
+                this.lightenBlockCounter = 1;
+                this.lightPattern.clear();
+                this.blockThreadList.clear();
+                this.playerAnswer.clear();
+                break;
+            case Engine.START_PATTERN:
+                this.playerAnswer.clear();
+                this.blockThreadList.clear();
+                break;
         }
+
         this.iEngine.onReset(resetState);
     }
 
     public boolean isPlayerHasPlayed(){
-        return this.playerAnswer.size() >= this.blockPattern.size();
+        return this.playerAnswer.size() >= this.lightPattern.size();
     }
 
     public View.OnClickListener getBlockOnClickListener(byte blockPos){
         return (v -> {
             this.addPlayerBlockAnswerAtPos(blockPos);
-            if(this.isPlayerHasPlayed()) this.EndLevel();
+            if(this.isPlayerHasPlayed()) this.EndPattern();
         });
     }
 
