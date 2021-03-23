@@ -17,7 +17,7 @@ import com.dut2.memorise.game.thread.BlockThread;
 import java.util.Random;
 
 public class Block extends AppCompatImageButton {
-    private int ARGBcolor;
+    private int ARGColor;
     private GradientDrawable shape;
     private float randomFloat = 1.0f;
     public Block(@NonNull Context context) {
@@ -42,9 +42,9 @@ public class Block extends AppCompatImageButton {
         shape = (GradientDrawable) layerDrawable.findDrawableByLayerId(R.id.btn_filled);
         assert shape != null;
         shape.mutate();
-        this.ARGBcolor = a.getColor(R.styleable.Block_color,0);
+        this.ARGColor = a.getColor(R.styleable.Block_color,0);
         float[] array = new float[3];
-        ColorUtils.colorToHSL(this.ARGBcolor,array);
+        ColorUtils.colorToHSL(this.ARGColor,array);
         array[2] -= 0.10f;
         this.shape.setColor(ColorUtils.HSLToColor(array));
         this.setBackground(null);
@@ -55,13 +55,13 @@ public class Block extends AppCompatImageButton {
     }
 
     public void setColor(int resId){
-        this.ARGBcolor = getContext().getColor(resId);
-        shape.setColor(this.ARGBcolor);
+        this.ARGColor = getContext().getColor(resId);
+        shape.setColor(this.ARGColor);
     }
 
-    public void setARGBColor(int ARGBcolor){
-        this.ARGBcolor = ARGBcolor;
-        shape.setColor(ARGBcolor);
+    public void setARGBColor(int ARGColor){
+        this.ARGColor = ARGColor;
+        shape.setColor(ARGColor);
     }
 
     @Override
@@ -74,12 +74,12 @@ public class Block extends AppCompatImageButton {
         blockSound.setLooping(false);
         float[] array = new float[3];
         if(pressed){
-            ColorUtils.colorToHSL(this.ARGBcolor,array);
+            ColorUtils.colorToHSL(this.ARGColor,array);
             array[2] += 0.10f;
             this.shape.setColor(ColorUtils.HSLToColor(array));
             blockSound.start();
         } else {
-            ColorUtils.colorToHSL(this.ARGBcolor,array);
+            ColorUtils.colorToHSL(this.ARGColor,array);
             array[2] -= 0.10f;
             this.shape.setColor(ColorUtils.HSLToColor(array));
             blockSound.stop();
