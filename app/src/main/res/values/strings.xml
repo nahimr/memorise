@@ -29,4 +29,10 @@
     <string name="connectionErrDB">Database connection error !</string>
     <string name="idText">ID</string>
     <string name="scoreText">Score</string>
+    <string name="timeOut">Timeout!</string>
+    <string name="rankValue">Rank : %d</string>
+    <string name="errorSignup">Error when signing up!</string>
+    <string name="wrongSigning">Wrong password or email !</string>
+    <string name="signinError">Sign in error !</string>
+    <string name="timerFinish">Timer</string>
 </resources>

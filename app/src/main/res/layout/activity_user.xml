@@ -72,11 +72,12 @@
         android:id="@+id/userImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
         app:layout_constraintTop_toTopOf="@+id/guideline10"
-        app:srcCompat="@drawable/ic_baseline_person_24" />
+        app:srcCompat="@drawable/neumorphic_light_logo" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -98,6 +99,15 @@
             android:textAppearance="?attr/textViewStyle" />
 
         <TextView
+            android:id="@+id/rank"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rankValue"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textViewStyle"
+            android:visibility="invisible" />
+
+        <TextView
             android:id="@+id/score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,6 +115,7 @@
             android:text="@string/scoreValue"
             android:textAlignment="center"
             android:textAppearance="?attr/textViewStyle" />
+
     </LinearLayout>
 
     <ProgressBar

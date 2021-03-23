@@ -22,6 +22,7 @@
         <activity android:name=".game.GameScreenActivity" android:screenOrientation="landscape"/>
         <activity android:name=".authentication.UserActivity" android:screenOrientation="landscape"/>
         <activity android:name=".game.LeaderboardActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".others.HelpActivity" android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
