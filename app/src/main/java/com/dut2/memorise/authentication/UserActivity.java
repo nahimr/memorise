@@ -19,6 +19,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import soup.neumorphism.NeumorphButton;
+import java.util.Iterator;
+import java.util.Objects;
 
 public class UserActivity extends AppCompatActivity {
     @Override
@@ -31,11 +33,11 @@ public class UserActivity extends AppCompatActivity {
         final ImageView userImage = findViewById(R.id.userImage);
         final TextView username = findViewById(R.id.username);
         final TextView score = findViewById(R.id.score);
+        final TextView rank = findViewById(R.id.rank);
         final FirebaseUser user = UserRepository.getInstance().getCurrentUser();
 
-        UserRepository.getInstance().getCurrentUserData(()->{
-            loading.setVisibility(View.VISIBLE);
-        },new ValueEventListener() {
+        UserRepository.getInstance().getCurrentUserData(()->
+                loading.setVisibility(View.VISIBLE),new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User fetchedUser = snapshot.getValue(User.class);
@@ -46,6 +48,24 @@ public class UserActivity extends AppCompatActivity {
                     username.setVisibility(View.VISIBLE);
                     score.setVisibility(View.VISIBLE);
                 }
+                UserRepository.getInstance().getLeaderboard(() ->
+                        loading.setVisibility(View.VISIBLE), task -> {
+                    DataSnapshot data = Objects.requireNonNull(task.getResult());
+                    Iterator<DataSnapshot> dataSnapshotIterator = data.getChildren().iterator();
+                    long pos = data.getChildrenCount()+1;
+                    do{
+                        pos--;
+                        User userFound = dataSnapshotIterator.next().getValue(User.class);
+                        assert userFound != null;
+                        assert fetchedUser != null;
+                        if(userFound.getUsername().equals(fetchedUser.getUsername())){
+                            rank.setText(String.format(getString(R.string.rankValue),pos));
+                            break;
+                        }
+                    }while(dataSnapshotIterator.hasNext());
+                    rank.setVisibility(View.VISIBLE);
+                    loading.setVisibility(View.INVISIBLE);
+                });
             }
 
             @Override
@@ -58,20 +78,22 @@ public class UserActivity extends AppCompatActivity {
 
         disconnect.setOnClickListener(v-> {
             UserRepository.getInstance().disconnect();
-            startActivity(new Intent(UserActivity.this, LoginActivity.class),
-                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-            finish();
+            gotoLoginActivity();
         });
-        deleteAccount.setOnClickListener(v-> {
-            UserRepository.getInstance().deleteAccount(task -> {
-                if (task.isSuccessful()){
-                    startActivity(new Intent(UserActivity.this, LoginActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-                    finish();
-                }else{
-                    Toast.makeText(this, "Error when deleting account!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
+
+        deleteAccount.setOnClickListener(v->
+                UserRepository.getInstance().deleteAccount(task -> {
+            if (task.isSuccessful()){
+                gotoLoginActivity();
+            }else{
+                Toast.makeText(this, "Error when deleting account!", Toast.LENGTH_SHORT).show();
+            }
+        }));
+    }
+
+    private void gotoLoginActivity(){
+        startActivity(new Intent(UserActivity.this, LoginActivity.class),
+                ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
     }
 }
