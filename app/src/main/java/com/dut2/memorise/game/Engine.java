@@ -165,15 +165,11 @@ public abstract class Engine {
     private void EndLevel(boolean isLevelWon){
         Log.d("Memorise", "End level");
 
-        // Giving out points
-        CalculatePoints();
-
-        // Calling delegates !
-        this.iChange.onChangePointsListener(this.points);
-        this.iEngine.onEndLevel(true,this.level);
-
         if(!isGameOver()){ // Is Player Game Over ?
             if(isLevelWon){ // Has Player Won level ?
+                // Giving out points
+                this.iEngine.onEndLevel(true,this.level);
+                CalculatePoints();
                 if(!timer){ // Does mode haven't got timer ?
                     if((this.level + 1) <= this.MAX_LEVEL){ // Check if max level reached out
                         this.level++;
@@ -187,6 +183,7 @@ public abstract class Engine {
                     StartLevel();
                 }
             } else {
+                this.iEngine.onEndLevel(false,this.level);
                 this.level = 1;
                 this.lives--;
                 StartLevel();
@@ -194,6 +191,9 @@ public abstract class Engine {
         } else {
             this.iEngine.onEndGame(false, this.points);
         }
+
+        // Calling delegates !
+        this.iChange.onChangePointsListener(this.points);
         this.iChange.onChangeLivesListener(this.lives);
     }
 
