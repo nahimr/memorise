@@ -11,13 +11,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 import com.dut2.memorise.R;
-import com.dut2.memorise.authentication.LoginActivity;
 import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.events.IChange;
 import com.dut2.memorise.game.events.IEngine;
@@ -39,7 +37,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private ImageView live1;
     private ImageView live2;
     private ImageView live3;
-    private TextView notifText;
+    private TextView notifiedText;
     private TextView pointText;
     private TextView levelText;
     private TextView timerText;
@@ -65,11 +63,10 @@ public class GameScreenActivity extends AppCompatActivity {
         live1 = findViewById(R.id.live1);
         live2 = findViewById(R.id.live2);
         live3 = findViewById(R.id.live3);
-        notifText = findViewById(R.id.notifText);
+        notifiedText = findViewById(R.id.notifText);
         pointText = findViewById(R.id.points);
         levelText = findViewById(R.id.level);
         timerText = findViewById(R.id.timer);
-
         final MediaPlayer cheersSound = MediaPlayer.create(this, R.raw.cheers_endlevel);
         final MediaPlayer badCheersSound = MediaPlayer.create(this, R.raw.badcheers_endlevel);
         badCheersSound.setVolume(85.f, 85.f);
@@ -102,8 +99,8 @@ public class GameScreenActivity extends AppCompatActivity {
 
         IEngine engineListener = new IEngine() {
             @Override
-            public void onInitLevel() {
-                GameScreenActivity.this.notifText.setText(R.string.cpuPlaying);
+            public void onStartLevel() {
+                GameScreenActivity.this.notifiedText.setText(R.string.cpuPlaying);
                 GameScreenActivity.this.blocksLayout.removeAllViews();
             }
 
@@ -131,11 +128,17 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public long onBeforeLevelStart() {
-                return 2000L; // Time to wait before start
+                // Time to wait in ms before start the game
+                return 2000L;
             }
 
             @Override
-            public void onStartLevel() {
+            public void onStartPattern() {
+                GameScreenActivity.this.notifiedText.setText(R.string.cpuPlaying);
+            }
+
+            @Override
+            public void onEndPattern(boolean patternWon) {
 
             }
 
@@ -205,33 +208,28 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onTimerTimeout() {
-                timerText.setText("Timeout!");
+                timerText.setText(R.string.timeOut);
+                // TODO: Load Alert Dialog
             }
 
             @Override
             public void onTimerFinish() {
-                timerText.setVisibility(View.INVISIBLE);
+                timerText.setText(R.string.timerFinish);
             }
         };
 
         if(mode == 0) {
             engine = new Easy();
-            engine.setOnEventListener(engineListener);
-            engine.setOnChangeListener(changeListener);
         } else if (mode == 1){
             engine = new Hard();
-            engine.setOnEventListener(engineListener);
-            engine.setOnChangeListener(changeListener);
         } else if(mode == 2){
             engine = new Expert();
-            engine.setOnEventListener(engineListener);
-            engine.setOnChangeListener(changeListener);
         } else if(mode == 3){
             engine = new Timer();
-            engine.setOnEventListener(engineListener);
-            engine.setOnChangeListener(changeListener);
             engine.setOnTimerChangeListener(timerListener);
         }
+        engine.setOnEventListener(engineListener);
+        engine.setOnChangeListener(changeListener);
         engine.StartLevel();
     }
 
@@ -264,7 +262,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private Runnable OnExecutionBlocksFinished(){
         final MediaPlayer transSound = MediaPlayer.create(GameScreenActivity.this, R.raw.win_trans);
         return () -> {
-            GameScreenActivity.this.notifText.setText(R.string.yourTurn);
+            GameScreenActivity.this.notifiedText.setText(R.string.yourTurn);
             transSound.start();
             GameScreenActivity.this.runOnUiThread(() -> {
                 for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
@@ -375,6 +373,4 @@ public class GameScreenActivity extends AppCompatActivity {
         super.finish();
         overridePendingTransition(0, 0);
     }
-
-
 }
