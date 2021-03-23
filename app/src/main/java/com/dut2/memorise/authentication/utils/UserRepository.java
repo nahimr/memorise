@@ -1,20 +1,22 @@
 package com.dut2.memorise.authentication.utils;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.util.Log;
-import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class UserRepository {
-    public static String FIREBASE_URL
+    public static final String FIREBASE_URL
             = "https://memorise-dut2-default-rtdb.europe-west1.firebasedatabase.app/";
     private final FirebaseDatabase mDatabase;
     private final FirebaseAuth mAuth;
@@ -22,13 +24,13 @@ public class UserRepository {
 
     public UserRepository() {
         mAuth = FirebaseAuth.getInstance();
-        //mAuth.useEmulator("192.168.1.25", 8080);
         mDatabase = FirebaseDatabase.getInstance(FIREBASE_URL);
-        //mDatabase.useEmulator("192.168.1.25", 8081);
+        mDatabase.setPersistenceEnabled(true);
     }
 
     public void addUser(Activity context,
-                               User user, DatabaseReference.CompletionListener onCompletionListener,
+                               User user,
+                        DatabaseReference.CompletionListener onCompletionListener,
                         OnFailureListener onFailureListener){
         mAuth.createUserWithEmailAndPassword(user.getEmail(),user.getPassword())
                 .addOnCompleteListener(context,task -> {
@@ -41,17 +43,27 @@ public class UserRepository {
                 }).addOnFailureListener(onFailureListener);
     }
 
+    public static Boolean isNetworkAvailable(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                || actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+    }
+
+
     public void deleteAccount(OnCompleteListener<Void> onCompleteListener){
         FirebaseUser tempUser =  Objects.requireNonNull(mAuth.getCurrentUser());
         String uid = tempUser.getUid();
         tempUser.delete().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                mDatabase.getReference("users").child(uid).removeValue().addOnCompleteListener(onCompleteListener).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Memorise","Error Memorise when deleting account",e);
-                    }
-                });
+                mDatabase.getReference("users").child(uid)
+                        .removeValue().addOnCompleteListener(onCompleteListener).addOnFailureListener(e ->
+                        Log.e("Memorise","Error Memorise when deleting account",e));
             }
         });
     }
@@ -70,7 +82,7 @@ public class UserRepository {
     }
 
     public void getCurrentUserData(Runnable atStart,ValueEventListener valueEventListener){
-        if(!isCurrentUserExists())return;
+        if(!isCurrentUserExists()) return;
         atStart.run();
         mDatabase.getReference("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                 .addListenerForSingleValueEvent(valueEventListener);
@@ -78,11 +90,10 @@ public class UserRepository {
 
     public void getLeaderboard(Runnable onStart,OnCompleteListener<DataSnapshot> onCompleteListener){
         onStart.run();
-        mDatabase.getReference("users").orderByKey().get()
+        mDatabase.getReference("users").orderByChild("score").get()
                 .addOnCompleteListener(onCompleteListener)
-                .addOnFailureListener(e -> {
-                    Log.e("Memorise", "Error!",e);
-                });
+                .addOnFailureListener(e ->
+                        Log.e("Memorise", "Error!",e));
     }
 
     public FirebaseUser getCurrentUser(){
@@ -98,8 +109,6 @@ public class UserRepository {
         if(!isCurrentUserExists()) return;
         FirebaseUser tempUser =  Objects.requireNonNull(mAuth.getCurrentUser());
         String uid = tempUser.getUid();
-        Map<String,Object> userData = new HashMap<>();
-        userData.put("score",newScore);
         mDatabase.getReference("users").child(uid)
                 .child("score")
                 .setValue(newScore)
