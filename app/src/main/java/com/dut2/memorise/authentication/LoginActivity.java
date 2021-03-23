@@ -35,10 +35,11 @@ public class LoginActivity extends AppCompatActivity{
                     if(task.isSuccessful()){
                         startActivity(new Intent(LoginActivity.this, MenuActivity.class),
                                 ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                        finish();
                     }else {
-                        Toast.makeText(this, "Wrong password or email !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText( LoginActivity.this, R.string.wrongSigning, Toast.LENGTH_SHORT).show();
                     }
-                }, e -> Toast.makeText(this, "Erreur de connexion !", Toast.LENGTH_SHORT).show()));
+                }, e -> Toast.makeText(LoginActivity.this, R.string.signinError, Toast.LENGTH_SHORT).show()));
 
         registerButton.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class),

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
 
-    private ArrayList<User> users;
+    private final ArrayList<User> users;
 
     public RankAdapter(ArrayList<User> users) {
         this.users = users;

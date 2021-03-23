@@ -11,13 +11,13 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.authentication.UserActivity;
+import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.GameOptionsActivity;
 import com.dut2.memorise.game.LeaderboardActivity;
+import com.dut2.memorise.others.HelpActivity;
+import soup.neumorphism.NeumorphImageButton;
 
 public class MenuActivity extends AppCompatActivity {
-    private ImageButton userButton;
-    private Button playButton;
-    private Button leaderboardButton;
     private MediaPlayer menuSound;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,9 +26,10 @@ public class MenuActivity extends AppCompatActivity {
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_menu);
-        userButton = findViewById(R.id.connectButton);
-        playButton = findViewById(R.id.playButton);
-        leaderboardButton = findViewById(R.id.leaderboardButton);
+        NeumorphImageButton helpButton = findViewById(R.id.helpButton);
+        ImageButton userButton = findViewById(R.id.connectButton);
+        Button playButton = findViewById(R.id.playButton);
+        Button leaderboardButton = findViewById(R.id.leaderboardButton);
         menuSound = MediaPlayer.create(this, R.raw.game_menu);
         menuSound.setVolume(50.0f,50.0f);
         menuSound.setLooping(true);
@@ -36,6 +37,8 @@ public class MenuActivity extends AppCompatActivity {
 
         final MediaPlayer buttonSound = MediaPlayer.create(this, R.raw.btn_push);
         userButton.setOnClickListener(v ->{
+            if(!UserRepository.isNetworkAvailable(getApplication())
+                    || !UserRepository.getInstance().isCurrentUserExists()) return;
             buttonSound.start();
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             startActivity(new Intent(MenuActivity.this, UserActivity.class),
@@ -50,10 +53,19 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         leaderboardButton.setOnClickListener(v -> {
+            if(!UserRepository.isNetworkAvailable(getApplication())
+                    || !UserRepository.getInstance().isCurrentUserExists())return;
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
             startActivity(new Intent(MenuActivity.this, LeaderboardActivity.class),
                     options.toBundle());
         });
+
+        helpButton.setOnClickListener(v->{
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(new Intent(MenuActivity.this, HelpActivity.class),
+                    options.toBundle());
+        });
+
     }
 
     @Override

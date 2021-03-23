@@ -33,10 +33,12 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             user = new User(email.getText().toString(),
                     username.getText().toString(), password.getText().toString());
-            UserRepository.getInstance().addUser(this, user, (error, databaseReference) ->
+            UserRepository.getInstance().addUser(this, user, (error, databaseReference) ->{
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class),
-                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle()),
-                    e -> Log.e("Memorise","Error registering !", e));
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                    finish();
+                    },
+                    e -> Log.e("Memorise",getString(R.string.errorSignup), e));
         });
 
         loginButton.setOnClickListener(v -> {

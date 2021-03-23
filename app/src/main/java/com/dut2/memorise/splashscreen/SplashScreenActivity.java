@@ -34,8 +34,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         short TIMEOUT_SPLASH = 3000;
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent whereToGo = new Intent(SplashScreenActivity.this, LoginActivity.class);
-            if(UserRepository.getInstance().isCurrentUserExists()){
+            Intent whereToGo = new Intent(SplashScreenActivity.this,
+                    LoginActivity.class);
+            if(UserRepository.getInstance().isCurrentUserExists() ||
+                    !UserRepository.isNetworkAvailable(getApplication())){
                 whereToGo = new Intent(SplashScreenActivity.this, MenuActivity.class);
             }
 
