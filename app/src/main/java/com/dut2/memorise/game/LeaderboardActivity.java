@@ -9,15 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dut2.memorise.R;
 import com.dut2.memorise.authentication.utils.User;
-import com.dut2.memorise.authentication.utils.UserComparator;
 import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.adapter.RankAdapter;
 import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class LeaderboardActivity extends AppCompatActivity {
-    private RecyclerView leaderboard;
     private ProgressBar loading;
     private ArrayList<User> users;
     @Override
@@ -26,7 +25,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_leaderboard);
         users = new ArrayList<>();
         loading = findViewById(R.id.loading_leaderboard);
-        leaderboard = findViewById(R.id.leaderboard);
+        RecyclerView leaderboard = findViewById(R.id.leaderboard);
         final RankAdapter rankAdapter = new RankAdapter(users);
         leaderboard.setLayoutManager(new LinearLayoutManager(this));
         leaderboard.setAdapter(rankAdapter);
@@ -40,7 +39,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                         users.add(tempUser);
                     }
                 }
-                users.sort(new UserComparator());
+                Collections.reverse(users);
                 loading.setVisibility(View.INVISIBLE);
                 rankAdapter.notifyDataSetChanged();
             });
