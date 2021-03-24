@@ -10,12 +10,14 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.R;
+import com.dut2.memorise.utils.ThemeLoader;
 
 public class GameOptionsActivity extends AppCompatActivity {
     private MediaPlayer gameOptionSound;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Explode());
         getWindow().setExitTransition(new Explode());

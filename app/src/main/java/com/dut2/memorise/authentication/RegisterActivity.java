@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.R;
 import com.dut2.memorise.authentication.utils.User;
 import com.dut2.memorise.authentication.utils.UserRepository;
+import com.dut2.memorise.utils.ThemeLoader;
 
 public class RegisterActivity extends AppCompatActivity {
     private User user;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Explode());
         getWindow().setExitTransition(new Explode());

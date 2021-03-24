@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.R;
 import com.dut2.memorise.authentication.utils.User;
 import com.dut2.memorise.authentication.utils.UserRepository;
+import com.dut2.memorise.utils.ThemeLoader;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +27,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         setContentView(R.layout.activity_user);
         final ProgressBar loading = findViewById(R.id.loading_user);
         final NeumorphButton deleteAccount = findViewById(R.id.deleteAccount);

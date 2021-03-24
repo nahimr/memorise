@@ -15,6 +15,7 @@ import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.GameOptionsActivity;
 import com.dut2.memorise.game.LeaderboardActivity;
 import com.dut2.memorise.others.HelpActivity;
+import com.dut2.memorise.utils.ThemeLoader;
 import soup.neumorphism.NeumorphImageButton;
 
 public class MenuActivity extends AppCompatActivity {
@@ -22,11 +23,14 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_menu);
         NeumorphImageButton helpButton = findViewById(R.id.helpButton);
+        NeumorphImageButton darkButton = findViewById(R.id.darkButton);
+        darkButton.setOnClickListener((v)->ThemeLoader.ChangeTheme(this));
         ImageButton userButton = findViewById(R.id.connectButton);
         Button playButton = findViewById(R.id.playButton);
         Button leaderboardButton = findViewById(R.id.leaderboardButton);

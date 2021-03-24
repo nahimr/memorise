@@ -25,6 +25,7 @@ import com.dut2.memorise.game.modes.Expert;
 import com.dut2.memorise.game.modes.Hard;
 import com.dut2.memorise.game.modes.Timer;
 import com.dut2.memorise.game.view.Block;
+import com.dut2.memorise.utils.ThemeLoader;
 import soup.neumorphism.NeumorphCardView;
 import java.util.*;
 
@@ -51,6 +52,7 @@ public class GameScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));

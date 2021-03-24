@@ -11,6 +11,7 @@ import com.dut2.memorise.R;
 import com.dut2.memorise.authentication.utils.User;
 import com.dut2.memorise.authentication.utils.UserRepository;
 import com.dut2.memorise.game.adapter.RankAdapter;
+import com.dut2.memorise.utils.ThemeLoader;
 import com.google.firebase.database.DataSnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,7 @@ public class LeaderboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         setContentView(R.layout.activity_leaderboard);
         users = new ArrayList<>();
         loading = findViewById(R.id.loading_leaderboard);

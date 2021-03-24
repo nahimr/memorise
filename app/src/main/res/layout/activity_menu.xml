@@ -9,7 +9,6 @@
         android:id="@+id/connectButton"
         style="@style/Widget.Neumorph.ImageButton"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:padding="32dp"
@@ -24,7 +23,6 @@
         android:id="@+id/helpButton"
         style="@style/Widget.Neumorph.ImageButton"
         android:layout_width="wrap_content"
-
         android:layout_height="88dp"
         android:layout_marginEnd="16dp"
         android:padding="32dp"
@@ -32,6 +30,21 @@
         android:src="@drawable/ic_baseline_help_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:neumorph_backgroundColor="?attr/bgColorConnectionBtn" />
+
+    <soup.neumorphism.NeumorphImageButton
+        android:id="@+id/darkButton"
+        style="@style/Widget.Neumorph.ImageButton"
+        android:layout_width="wrap_content"
+
+        android:layout_height="88dp"
+        android:layout_marginEnd="24dp"
+        android:padding="32dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_baseline_wb_sunny_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/helpButton"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
         app:neumorph_backgroundColor="?attr/bgColorConnectionBtn" />
 

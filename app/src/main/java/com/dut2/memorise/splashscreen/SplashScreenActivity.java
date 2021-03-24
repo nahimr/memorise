@@ -14,11 +14,13 @@ import com.dut2.memorise.MenuActivity;
 import com.dut2.memorise.R;
 import com.dut2.memorise.authentication.LoginActivity;
 import com.dut2.memorise.authentication.utils.UserRepository;
+import com.dut2.memorise.utils.ThemeLoader;
 
 public class SplashScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeLoader.LoadTheme(this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
