@@ -1,8 +1,10 @@
 package com.dut2.memorise.others;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.transition.Fade;
 import android.view.Window;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dut2.memorise.R;
@@ -15,6 +17,8 @@ public class HelpActivity extends AppCompatActivity {
         getWindow().setEnterTransition(new Fade(Fade.MODE_IN));
         getWindow().setExitTransition(new Fade(Fade.MODE_OUT));
         setContentView(R.layout.activity_help);
+        final TextView rules = findViewById(R.id.rules);
+        rules.setMovementMethod(new ScrollingMovementMethod());
 
     }
 }

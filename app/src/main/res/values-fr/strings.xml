@@ -35,4 +35,14 @@
     <string name="wrongSigning">Wrong password or email !</string>
     <string name="signinError">Sign in error !</string>
     <string name="timerFinish">Chrono</string>
+    <string name="rules">
+        Règles du Memorise\n\nLe but du jeu est de mémoriser la séquence de l\'ordinateur
+        Vous devez passer au moins un niveau pour gagner des points\n
+        Les points sont calculer dans l\'exemple suivant:\n
+        Exemple: (Numéro du Niveau x Base)\n
+        Mode Facile: Niveau x 1\n
+        Mode Difficile: Niveau x 1.5\n
+        Mode Expert: Niveau x 3\n
+        Mode Chrono: Niveau x 2\n
+    </string>
 </resources>

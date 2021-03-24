@@ -35,4 +35,14 @@
     <string name="wrongSigning">Wrong password or email !</string>
     <string name="signinError">Sign in error !</string>
     <string name="timerFinish">Timer</string>
+    <string name="rules">
+        Rules of Memorise\n\nThe goal of this game is to memorise the sequence of the CPU
+        You need to pass at least a level in order to win points\n
+        The points are calculated in the following:\n
+        Example: (Level x Base)\n
+        Easy Mode: Level x 1\n
+        Hard Mode: Level x 1.5\n
+        Expert Mode: Level x 3\n
+        Timer Mode: Level x 2\n
+    </string>
 </resources>
