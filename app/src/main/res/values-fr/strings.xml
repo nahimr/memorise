@@ -31,9 +31,9 @@
     <string name="scoreText">Score</string>
     <string name="timeOut">Timeout!</string>
     <string name="rankValue">Rang : %d</string>
-    <string name="errorSignup">Error when signing up!</string>
-    <string name="wrongSigning">Wrong password or email !</string>
-    <string name="signinError">Sign in error !</string>
+    <string name="errorSignup">Erreur lors de l\'inscription !</string>
+    <string name="wrongSigning">Mauvais email ou mot de passe !</string>
+    <string name="signinError">Erreur de connexion !</string>
     <string name="timerFinish">Chrono</string>
     <string name="rules">
         Règles du Memorise\n\nLe but du jeu est de mémoriser la séquence de l\'ordinateur
