@@ -96,6 +96,6 @@ public class UserActivity extends AppCompatActivity {
     private void gotoLoginActivity(){
         startActivity(new Intent(UserActivity.this, LoginActivity.class),
                 ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        finish();
+        finishAffinity();
     }
 }
