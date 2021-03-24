@@ -16,8 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuActivity" android:noHistory="false" android:screenOrientation="landscape"/>
-        <activity android:name=".authentication.RegisterActivity" android:screenOrientation="landscape"/>
-        <activity android:name=".authentication.LoginActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".authentication.RegisterActivity" android:noHistory="true" android:screenOrientation="landscape"/>
+        <activity android:name=".authentication.LoginActivity" android:noHistory="true" android:screenOrientation="landscape"/>
         <activity android:name=".game.GameOptionsActivity" android:screenOrientation="landscape"/>
         <activity android:name=".game.GameScreenActivity" android:screenOrientation="landscape"/>
         <activity android:name=".authentication.UserActivity" android:screenOrientation="landscape"/>
