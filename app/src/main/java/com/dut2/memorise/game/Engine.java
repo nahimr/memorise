@@ -187,7 +187,12 @@ public abstract class Engine {
                 this.iEngine.onEndLevel(false,this.level);
                 this.level = 1;
                 this.lives--;
-                StartLevel();
+                if(!isGameOver()){
+                    StartLevel();
+                } else {
+                    this.iEngine.onEndGame(false, this.points);
+                }
+
             }
         } else {
             this.iEngine.onEndGame(false, this.points);
