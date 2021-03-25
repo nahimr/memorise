@@ -141,7 +141,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onEndPattern(boolean patternWon) {
-
+                disableBlocks();
             }
 
             @Override
