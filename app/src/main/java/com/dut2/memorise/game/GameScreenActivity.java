@@ -151,8 +151,11 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onEndLevel(boolean levelWon, byte levelCount) {
-               if(levelWon && levelCount % 2 == 0) cheersSound.start();
-               if(!levelWon) badCheersSound.start();
+                if(levelWon){
+                    cheersSound.start();
+                } else {
+                    badCheersSound.start();
+                }
                GameScreenActivity.this.showOffBlocks(null);
             }
 
@@ -164,8 +167,11 @@ public class GameScreenActivity extends AppCompatActivity {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(GameScreenActivity.this);
                 dialog.setTitle(R.string.app_name);
                 dialog.setMessage(R.string.playAgain);
-                dialog.setNegativeButton(R.string.yes, (dialog1, which) ->
-                        engine.StartLevel()).setPositiveButton(R.string.no,(dialog1, which)->{
+                dialog.setNegativeButton(R.string.yes, (dialog1, which) ->{
+                    engine.Reset(Engine.RESET_GAME);
+                    engine.StartLevel();
+                });
+                dialog.setPositiveButton(R.string.no,(dialog1, which)->{
                     MediaPlayer.create(GameScreenActivity.this, R.raw.player_start).start();
                     GameScreenActivity.this.finish();
                 }).show();
@@ -338,6 +344,12 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onAnimationRepeat(Animation animation) { }
         });
+    }
+
+    private void disableBlocks(){
+        for (int i = 0; i < this.blocksLayout.getChildCount(); i++) {
+            this.blocksLayout.getChildAt(i).setEnabled(false);
+        }
     }
 
     private void showOffBlocks(Runnable runnable){
