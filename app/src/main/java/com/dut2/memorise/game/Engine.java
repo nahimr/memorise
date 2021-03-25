@@ -14,6 +14,7 @@ public abstract class Engine {
     public static final byte START_LEVEL = 0;
     public static final byte START_PATTERN = 1;
     public static final byte END_PATTERN = 2;
+    public static final byte RESET_GAME = 3;
     private final byte MAX_LEVEL = 7;
     private final byte MIN_BLOCK = 4;
     private final byte MAX_BLOCK = 10;
@@ -258,6 +259,20 @@ public abstract class Engine {
             case Engine.START_PATTERN:
                 this.playerAnswer.clear();
                 this.blockThreadList.clear();
+                break;
+            case Engine.RESET_GAME:
+                this.lightenBlocks = minLightenBlock;
+                this.lightenBlockCounter = 1;
+                this.numbersOfBlocks = MIN_BLOCK;
+                this.lives = maxLives;
+                this.level = 1;
+                this.points = 0.0f;
+                this.lightPattern.clear();
+                this.blockThreadList.clear();
+                this.playerAnswer.clear();
+                this.iChange.onChangeLevelsListener(this.level);
+                this.iChange.onChangeLivesListener(this.lives);
+                this.iChange.onChangePointsListener(this.points);
                 break;
         }
 
